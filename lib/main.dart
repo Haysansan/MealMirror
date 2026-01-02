@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
-
 import 'core/navigation/app_router.dart';
-import 'data/local/app_database.dart';
 import 'core/theme/app_theme.dart';
-import 'features/home/home_screen.dart';
+import 'data/preferences/app_preferences.dart';
 
-void main() {
-  runApp(const MealMirrorApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppPreferences.init();
+  runApp(const MyApp());
 }
 
-class MealMirrorApp extends StatelessWidget {
-  const MealMirrorApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp.router(
+      routerConfig: appRouter,
+      title: 'MealMirror',
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -2,16 +2,25 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  static ThemeData lightTheme = ThemeData(
+  static final ThemeData lightTheme = ThemeData(
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      background: AppColors.background,
+      surface: AppColors.surface,
+      error: AppColors.error,
+      onPrimary: AppColors.textDarkTheme,
+      onBackground: AppColors.textWhiteTheme,
+      onSurface: AppColors.textWhiteTheme,
+    ),
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
-
+    cardColor: AppColors.surface,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.primary,
       elevation: 0,
-      foregroundColor: AppColors.textWhiteTheme,
+      foregroundColor: AppColors.textDarkTheme,
     ),
-
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
         color: AppColors.primary,
@@ -23,6 +32,29 @@ class AppTheme {
       ),
       bodyLarge: TextStyle(color: AppColors.textWhiteTheme),
       bodyMedium: TextStyle(color: AppColors.textWhiteTheme),
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: AppColors.primary,
+      foregroundColor: AppColors.textDarkTheme,
+    ),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      background: AppColors.section,
+      surface: AppColors.surfaceDark,
+      error: AppColors.error,
+      onPrimary: AppColors.textWhiteTheme,
+      onBackground: AppColors.textDarkTheme,
+      onSurface: AppColors.textDarkTheme,
+    ),
+    scaffoldBackgroundColor: AppColors.section,
+    cardColor: AppColors.surfaceDark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.surfaceDark,
+      foregroundColor: AppColors.textWhiteTheme,
     ),
   );
 }
