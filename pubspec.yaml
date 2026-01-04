@@ -71,16 +71,16 @@ flutter:
   fonts:
     - family: Inter
       fonts:
-        - asset: assets/fonts/InterDisplay-SemiBold.ttf
-        - asset: assets/fonts/InterDisplay-Regular.ttf
-        - asset: assets/fonts/Inter-Thin.ttf
-        - asset: assets/fonts/Inter-Black.ttf
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Medium.ttf
+        - asset: assets/fonts/inter/InterDisplay-SemiBold.ttf
+        - asset: assets/fonts/inter/InterDisplay-Regular.ttf
+        - asset: assets/fonts/inter/Inter-Thin.ttf
+        - asset: assets/fonts/inter/Inter-Black.ttf
+        - asset: assets/fonts/inter/Inter-Regular.ttf
+        - asset: assets/fonts/inter/Inter-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Inter-SemiBold.ttf
+        - asset: assets/fonts/inter/Inter-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Inter-Bold.ttf
+        - asset: assets/fonts/inter/Inter-Bold.ttf
           weight: 700
 
   # To add assets to your application, add an assets section, like this:
