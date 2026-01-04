@@ -18,7 +18,7 @@ class AppColors {
   // Status
   static const Color error = Colors.red;
 
-  // --- Log Meal / Portion Size specific palette (exact existing values) ---
+  // --- Log Meal
   static const Color logMealBackground = Color(0xFFF7EFDA);
   static const Color logMealTitle = Color(0x590E1A00);
   static const Color matcha = Color(0xFF7B8551);
@@ -26,7 +26,6 @@ class AppColors {
   static const Color ink = Color(0xFF0E1A00);
   static const Color inkMuted = Color(0xA50E1A00);
 
-  // Common button surface used in these screens
   static const Color actionSurface = Color(0xFFCADBB7);
 
   // Portion size category pill
@@ -38,7 +37,7 @@ class AppColors {
   static const Color portionCardBaseBorder = Color(0xFFE1E7EF);
   static const Color portionCardSelectedBorder = Color(0xFF72B135);
 
-  // Meal category colors (exact existing values)
+  // Meal category colors
   static const Color veggieFruits = Color(0xFF72B135);
   static const Color grainStarches = Color(0xFFF7C480);
   static const Color meatSeafood = Color(0xFFFF9A8F);
@@ -47,4 +46,7 @@ class AppColors {
   static const Color oilsFats = Color(0xFFFFDFA1);
   static const Color snacks = Color(0xFFF39624);
   static const Color beverages = Color(0xFFD5FFFD);
+
+  // Welcome pet accent
+  static const Color petGreen = Color(0xFF6ABD7E);
 }
