@@ -46,7 +46,7 @@ class MealLogList extends StatelessWidget {
                       size: 16,
                       color: index < score
                           ? AppColors.primary
-                          : AppColors.secondary.withOpacity(0.4),
+                          : AppColors.secondary.withValues(alpha: 0.4),
                     ),
                   ),
                 ),
@@ -74,7 +74,7 @@ class MealLogList extends StatelessWidget {
       height: 40,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Image.asset(assetPath, fit: BoxFit.contain),
