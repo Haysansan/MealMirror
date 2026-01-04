@@ -4,29 +4,37 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import 'widgets/nutrition_selector.dart';
 import 'widgets/selection_pill.dart';
-import 'log_meal_flow_args.dart';
 
-class PortionSizeScreen extends StatefulWidget {
-  const PortionSizeScreen({super.key, required this.selectedCategories});
+class ProcessingLevelScreen extends StatefulWidget {
+  const ProcessingLevelScreen({
+    super.key,
+    required this.selectedCategories,
+    required this.selectedPortion,
+  });
 
   final List<String> selectedCategories;
+  final String selectedPortion;
 
   @override
-  State<PortionSizeScreen> createState() => _PortionSizeScreenState();
+  State<ProcessingLevelScreen> createState() => _ProcessingLevelScreenState();
 }
 
-class _PortionSizeScreenState extends State<PortionSizeScreen> {
-  String? _selectedPortion;
+class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
+  String? _selectedProcessing;
 
-  void _togglePortion(String value) {
+  void _toggleProcessing(String value) {
     setState(() {
-      _selectedPortion = (_selectedPortion == value) ? null : value;
+      _selectedProcessing = (_selectedProcessing == value) ? null : value;
     });
+  }
+
+  void _addMeal() {
+    context.go('/home');
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool canContinue = _selectedPortion != null;
+    final bool canAddMeal = _selectedProcessing != null;
 
     return Scaffold(
       backgroundColor: AppColors.logMealBackground,
@@ -51,7 +59,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                       children: [
                         const Expanded(
                           child: Text(
-                            'Portion Size',
+                            'Processing Levels',
                             style: TextStyle(
                               color: AppColors.logMealTitle,
                               fontSize: 32,
@@ -82,7 +90,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                   const Padding(
                     padding: EdgeInsets.only(left: 26, right: 26, top: 16),
                     child: Text(
-                      'Select a food category',
+                      'Selected food categories',
                       style: TextStyle(
                         color: AppColors.matcha,
                         fontSize: 14,
@@ -106,7 +114,28 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                   const Padding(
                     padding: EdgeInsets.only(left: 26, right: 26, top: 20),
                     child: Text(
-                      'How much did you eat?',
+                      'Selected portion size',
+                      style: TextStyle(
+                        color: AppColors.matcha,
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 1.52,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 26, right: 26, top: 8),
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [SelectionPill(label: widget.selectedPortion)],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 26, right: 26, top: 20),
+                    child: Text(
+                      'How processed is this meal?',
                       style: TextStyle(
                         color: AppColors.matcha,
                         fontSize: 20,
@@ -119,7 +148,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                   const Padding(
                     padding: EdgeInsets.only(left: 26, right: 26, top: 6),
                     child: Text(
-                      'Choose the portion that best matches your meal.',
+                      'This helps us understand your eating patterns.',
                       style: TextStyle(
                         color: AppColors.matcha,
                         fontSize: 14,
@@ -130,40 +159,45 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 17, right: 17, top: 18),
+                    padding: const EdgeInsets.only(
+                      left: 17,
+                      right: 17,
+                      top: 18,
+                    ),
                     child: Column(
                       children: [
                         PortionSizeSelectionCard(
-                          title: 'Small',
-                          description: 'Just a taste or small side.',
-                          icon: Icon(
-                            Icons.ramen_dining,
+                          title: 'Whole',
+                          description: 'Unrefined, close to natural state.',
+                          icon: const Icon(
+                            Icons.eco,
                             color: AppColors.darkMatcha,
                           ),
-                          selected: _selectedPortion == 'Small',
-                          onTap: () => _togglePortion('Small'),
+                          selected: _selectedProcessing == 'Whole',
+                          onTap: () => _toggleProcessing('Whole'),
                         ),
-                        SizedBox(height: 15.30),
+                        const SizedBox(height: 15.30),
                         PortionSizeSelectionCard(
-                          title: 'Normal',
-                          description: 'A typical balanced meal size.',
-                          icon: Icon(
-                            Icons.lunch_dining,
+                          title: 'Processed',
+                          description:
+                              'Ingredients altered, simple preparation.',
+                          icon: const Icon(
+                            Icons.soup_kitchen,
                             color: AppColors.darkMatcha,
                           ),
-                          selected: _selectedPortion == 'Normal',
-                          onTap: () => _togglePortion('Normal'),
+                          selected: _selectedProcessing == 'Processed',
+                          onTap: () => _toggleProcessing('Processed'),
                         ),
-                        SizedBox(height: 15.30),
+                        const SizedBox(height: 15.30),
                         PortionSizeSelectionCard(
-                          title: 'Large',
-                          description: 'A substantial or oversized portion.',
-                          icon: Icon(
-                            Icons.restaurant,
+                          title: 'Ultra-Processed',
+                          description: 'Highly industrial and additives.',
+                          icon: const Icon(
+                            Icons.science,
                             color: AppColors.darkMatcha,
                           ),
-                          selected: _selectedPortion == 'Large',
-                          onTap: () => _togglePortion('Large'),
+                          selected: _selectedProcessing == 'Ultra-Processed',
+                          onTap: () => _toggleProcessing('Ultra-Processed'),
                         ),
                       ],
                     ),
@@ -171,7 +205,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                   const Padding(
                     padding: EdgeInsets.only(left: 26, right: 26, top: 20),
                     child: Text(
-                      "💡  Portion size helps us understand your eating patterns.\nThere's no judgment just learning about your habits.",
+                      '💡 Your pet will react based on your choice. Whole foods\nmake them happier!',
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                         color: AppColors.matcha,
@@ -191,27 +225,16 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                     child: SizedBox(
                       height: 60,
                       child: Opacity(
-                        opacity: canContinue ? 1 : 0.55,
+                        opacity: canAddMeal ? 1 : 0.55,
                         child: Material(
                           color: AppColors.actionSurface,
                           borderRadius: BorderRadius.circular(10),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10),
-                            onTap: canContinue
-                                ? () {
-                                    context.push(
-                                      '/processing-level',
-                                      extra: ProcessingLevelArgs(
-                                        selectedCategories:
-                                            widget.selectedCategories,
-                                        selectedPortion: _selectedPortion!,
-                                      ),
-                                    );
-                                  }
-                                : null,
+                            onTap: canAddMeal ? _addMeal : null,
                             child: const Center(
                               child: Text(
-                                'Continue',
+                                'Add Meal',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: AppColors.darkMatcha,

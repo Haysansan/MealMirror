@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
 import 'widgets/meal_input_card.dart';
-import 'portion_size_screen.dart';
+import 'log_meal_flow_args.dart';
 
 void main() {
   runApp(const LogMealDemoApp());
@@ -193,12 +194,11 @@ class _LogMealScreenState extends State<LogMealScreen> {
                           borderRadius: BorderRadius.circular(10),
                           onTap: canContinue
                               ? () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => PortionSizeScreen(
-                                        selectedCategories: _selectedCategories
-                                            .toList(),
-                                      ),
+                                  context.push(
+                                    '/portion-size',
+                                    extra: PortionSizeArgs(
+                                      selectedCategories: _selectedCategories
+                                          .toList(),
                                     ),
                                   );
                                 }
