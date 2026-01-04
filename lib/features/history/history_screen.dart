@@ -1,6 +1,6 @@
-AppScaffold
-└─ Column
-├─ SectionHeader (History)
-├─ HistoryFilterTabs
-├─ HistoryStatCard
-└─ MealLogList
+// AppScaffold
+// └─ Column
+// ├─ SectionHeader (History)
+// ├─ HistoryFilterTabs
+// ├─ HistoryStatCard
+// └─ MealLogList
