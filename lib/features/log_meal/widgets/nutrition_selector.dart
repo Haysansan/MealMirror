@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
+
 class PortionSizeSelectionCard extends StatelessWidget {
   const PortionSizeSelectionCard({
     super.key,
@@ -24,9 +26,9 @@ class PortionSizeSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final BorderRadius borderRadius = BorderRadius.circular(12.75);
 
-    const Color baseFill = Color(0xFFCADBB7);
-    const Color baseBorder = Color(0xFFE1E7EF);
-    const Color selectedBorder = Color(0xFF72B135);
+    const Color baseFill = AppColors.portionCardBaseFill;
+    const Color baseBorder = AppColors.portionCardBaseBorder;
+    const Color selectedBorder = AppColors.portionCardSelectedBorder;
 
     final Color fillColor = selected
         ? Color.lerp(baseFill, Colors.white, 0.18)!
@@ -56,8 +58,8 @@ class PortionSizeSelectionCard extends StatelessWidget {
       ),
     ];
 
-    const Color titleColor = Color(0xFF0E1A00);
-    const Color descriptionColor = Color(0xA50E1A00);
+    const Color titleColor = AppColors.ink;
+    const Color descriptionColor = AppColors.inkMuted;
 
     return Material(
       type: MaterialType.transparency,

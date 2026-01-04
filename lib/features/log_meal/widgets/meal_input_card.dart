@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
+
 class MealInputCard extends StatefulWidget {
   const MealInputCard({
     super.key,
     required this.title,
     required this.icon,
-    this.color = const Color(0xFF72B135),
+    this.color = AppColors.veggieFruits,
     this.width = 161,
     this.height = 100.45,
     this.selected,
@@ -113,7 +115,7 @@ class _MealInputCardState extends State<MealInputCard> {
                     widget.title,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      color: Color(0xFF485935) /* Dark-Matcha */,
+                      color: AppColors.darkMatcha /* Dark-Matcha */,
                       fontSize: 15,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w400,

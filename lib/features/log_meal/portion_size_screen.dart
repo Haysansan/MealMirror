@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
 import 'widgets/nutrition_selector.dart';
 
 class PortionSizeScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
     final bool canContinue = _selectedPortion != null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7EFDA),
+      backgroundColor: AppColors.logMealBackground,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -48,7 +49,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                           child: Text(
                             'Portion Size',
                             style: TextStyle(
-                              color: Color(0x590E1A00),
+                              color: AppColors.logMealTitle,
                               fontSize: 32,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,
@@ -66,7 +67,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                               child: Icon(
                                 Icons.arrow_back_ios_new,
                                 size: 18,
-                                color: Color(0xFF485935),
+                                color: AppColors.darkMatcha,
                               ),
                             ),
                           ),
@@ -79,7 +80,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                     child: Text(
                       'Select a food category',
                       style: TextStyle(
-                        color: Color(0xFF7B8551),
+                        color: AppColors.matcha,
                         fontSize: 14,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w500,
@@ -103,7 +104,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                     child: Text(
                       'How much did you eat?',
                       style: TextStyle(
-                        color: Color(0xFF7B8551),
+                        color: AppColors.matcha,
                         fontSize: 20,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
@@ -116,7 +117,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                     child: Text(
                       'Choose the portion that best matches your meal.',
                       style: TextStyle(
-                        color: Color(0xFF7B8551),
+                        color: AppColors.matcha,
                         fontSize: 14,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w500,
@@ -133,7 +134,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                           description: 'Just a taste or small side.',
                           icon: Icon(
                             Icons.ramen_dining,
-                            color: Color(0xFF485935),
+                            color: AppColors.darkMatcha,
                           ),
                           selected: _selectedPortion == 'Small',
                           onTap: () => _togglePortion('Small'),
@@ -144,7 +145,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                           description: 'A typical balanced meal size.',
                           icon: Icon(
                             Icons.lunch_dining,
-                            color: Color(0xFF485935),
+                            color: AppColors.darkMatcha,
                           ),
                           selected: _selectedPortion == 'Normal',
                           onTap: () => _togglePortion('Normal'),
@@ -155,7 +156,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                           description: 'A substantial or oversized portion.',
                           icon: Icon(
                             Icons.restaurant,
-                            color: Color(0xFF485935),
+                            color: AppColors.darkMatcha,
                           ),
                           selected: _selectedPortion == 'Large',
                           onTap: () => _togglePortion('Large'),
@@ -169,7 +170,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                       "💡  Portion size helps us understand your eating patterns.\nThere's no judgment just learning about your habits.",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
-                        color: Color(0xFF7B8551),
+                        color: AppColors.matcha,
                         fontSize: 12.8,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
@@ -188,7 +189,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                       child: Opacity(
                         opacity: canContinue ? 1 : 0.55,
                         child: Material(
-                          color: const Color(0xFFCADBB7),
+                          color: AppColors.actionSurface,
                           borderRadius: BorderRadius.circular(10),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10),
@@ -200,7 +201,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                                 'Continue',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Color(0xFF485935),
+                                  color: AppColors.darkMatcha,
                                   fontSize: 17,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w700,
@@ -240,7 +241,7 @@ class _CategoryPill extends StatelessWidget {
         height: 28.59,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: ShapeDecoration(
-          color: const Color(0xFFDEFFBF),
+          color: AppColors.categoryPillFill,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -253,7 +254,7 @@ class _CategoryPill extends StatelessWidget {
             softWrap: false,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Color(0xFF00AF51),
+              color: AppColors.categoryPillText,
               fontSize: 15,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,

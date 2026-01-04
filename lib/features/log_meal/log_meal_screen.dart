@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
 import 'widgets/meal_input_card.dart';
 import 'portion_size_screen.dart';
 
@@ -46,7 +47,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
     final bool canContinue = _selectedCategories.isNotEmpty;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7EFDA),
+      backgroundColor: AppColors.logMealBackground,
       body: SafeArea(
         child: Center(
           child: SizedBox(
@@ -63,7 +64,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                     child: Text(
                       'Log a Meal',
                       style: TextStyle(
-                        color: Color(0x590E1A00),
+                        color: AppColors.logMealTitle,
                         fontSize: 32,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
@@ -81,7 +82,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                     child: Text(
                       'Select a food category',
                       style: TextStyle(
-                        color: Color(0xFF7B8551) /* Matcha */,
+                        color: AppColors.matcha /* Matcha */,
                         fontSize: 14,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w500,
@@ -102,7 +103,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Veggie & Fruits',
                           icon: Image.asset('assets/images/Vegies.png'),
-                          color: const Color(0xFF72B135),
+                          color: AppColors.veggieFruits,
                           selected: _selectedCategories.contains(
                             'Veggie & Fruits',
                           ),
@@ -112,7 +113,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Grain & Starches',
                           icon: Image.asset('assets/images/Bread.png'),
-                          color: const Color(0xFFF7C480),
+                          color: AppColors.grainStarches,
                           selected: _selectedCategories.contains(
                             'Grain & Starches',
                           ),
@@ -122,7 +123,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Meat & Seafood',
                           icon: Image.asset('assets/images/meat.png'),
-                          color: const Color(0xFFFF9A8F),
+                          color: AppColors.meatSeafood,
                           selected: _selectedCategories.contains(
                             'Meat & Seafood',
                           ),
@@ -132,7 +133,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Plant Protein',
                           icon: Image.asset('assets/images/Tomato.png'),
-                          color: const Color.fromARGB(255, 255, 216, 210),
+                          color: AppColors.plantProtein,
                           selected: _selectedCategories.contains(
                             'Plant Protein',
                           ),
@@ -142,7 +143,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Dairy & Eggs',
                           icon: Image.asset('assets/images/Egg.png'),
-                          color: const Color.fromARGB(255, 255, 222, 100),
+                          color: AppColors.dairyEggs,
                           selected: _selectedCategories.contains(
                             'Dairy & Eggs',
                           ),
@@ -152,7 +153,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Oils & Fats',
                           icon: Image.asset('assets/images/cheese.png'),
-                          color: const Color(0xFFFFDFA1),
+                          color: AppColors.oilsFats,
                           selected: _selectedCategories.contains('Oils & Fats'),
                           onSelectedChanged: (value) =>
                               _setCategorySelected('Oils & Fats', value),
@@ -160,7 +161,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Snacks',
                           icon: Image.asset('assets/images/cookie.png'),
-                          color: const Color(0xFFF39624),
+                          color: AppColors.snacks,
                           selected: _selectedCategories.contains('Snacks'),
                           onSelectedChanged: (value) =>
                               _setCategorySelected('Snacks', value),
@@ -168,7 +169,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                         MealInputCard(
                           title: 'Beverages',
                           icon: Image.asset('assets/images/beverages.png'),
-                          color: const Color.fromARGB(255, 213, 255, 253),
+                          color: AppColors.beverages,
                           selected: _selectedCategories.contains('Beverages'),
                           onSelectedChanged: (value) =>
                               _setCategorySelected('Beverages', value),
@@ -186,7 +187,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                     child: Opacity(
                       opacity: canContinue ? 1 : 0.55,
                       child: Material(
-                        color: const Color(0xFFCADBB7),
+                        color: AppColors.actionSurface,
                         borderRadius: BorderRadius.circular(10),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(10),
@@ -207,7 +208,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                               'Continue',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Color(0xFF485935),
+                                color: AppColors.darkMatcha,
                                 fontSize: 17,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w700,
