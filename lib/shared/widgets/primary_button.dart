@@ -19,7 +19,8 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: (Theme.of(context).textTheme.bodyLarge ?? const TextStyle()).copyWith(color: Theme.of(context).colorScheme.onPrimary),
+        style: (Theme.of(context).textTheme.bodyLarge ?? const TextStyle())
+            .copyWith(color: Theme.of(context).colorScheme.onPrimary),
       ),
     );
   }

@@ -43,7 +43,10 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/log-meal', builder: (context, state) => const LogMealScreen()),
+    GoRoute(
+      path: '/log-meal',
+      builder: (context, state) => const LogMealScreen(),
+    ),
     GoRoute(
       path: '/portion-size',
       builder: (context, state) {
@@ -63,8 +66,14 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: '/history', builder: (context, state) => const HistoryScreen()),
-    GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
+    GoRoute(
+      path: '/history',
+      builder: (context, state) => const HistoryScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
   ],
   redirect: (context, state) {
     final seenOnboarding = AppPreferences.getBool('seenOnboarding') ?? false;
