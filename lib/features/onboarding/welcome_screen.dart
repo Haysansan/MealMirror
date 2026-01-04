@@ -204,73 +204,12 @@ class _SoftCircle extends StatelessWidget {
             ),
             child: const SizedBox.expand(),
           ),
-          IgnorePointer(
-            child: CustomPaint(
-              size: Size(diameter, diameter),
-              // painter: _NoiseRingPainter(
-              //   color: noiseColor,
-              //   count: 760,
-              //   jitter: 9.5,
-              //   dotRadiusMin: 0.35,
-              //   dotRadiusMax: 0.95,
-              // ),
-            ),
-          ),
+          IgnorePointer(child: CustomPaint(size: Size(diameter, diameter))),
         ],
       ),
     );
   }
 }
-
-// class _NoiseRingPainter extends CustomPainter {
-//   _NoiseRingPainter({
-//     required this.color,
-//     required this.count,
-//     required this.jitter,
-//     required this.dotRadiusMin,
-//     required this.dotRadiusMax,
-//   });
-
-//   final Color color;
-//   final int count;
-//   final double jitter;
-//   final double dotRadiusMin;
-//   final double dotRadiusMax;
-
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final double radius = size.shortestSide / 2;
-//     final Offset center = Offset(size.width / 2, size.height / 2);
-
-//     final paint = Paint()
-//       ..color = color
-//       ..style = PaintingStyle.fill;
-
-//     final int seed = (radius * 1000).round();
-//     final random = math.Random(seed);
-
-//     for (int i = 0; i < count; i++) {
-//       final double angle = random.nextDouble() * math.pi * 2;
-//       final double localJitter = (random.nextDouble() - 0.5) * jitter;
-//       final double r = radius + localJitter;
-//       final Offset p =
-//           center + Offset(math.cos(angle) * r, math.sin(angle) * r);
-
-//       final double dotRadius =
-//           dotRadiusMin + random.nextDouble() * (dotRadiusMax - dotRadiusMin);
-//       canvas.drawCircle(p, dotRadius, paint);
-//     }
-//   }
-
-//   @override
-//   bool shouldRepaint(covariant _NoiseRingPainter oldDelegate) {
-//     return oldDelegate.color != color ||
-//         oldDelegate.count != count ||
-//         oldDelegate.jitter != jitter ||
-//         oldDelegate.dotRadiusMin != dotRadiusMin ||
-//         oldDelegate.dotRadiusMax != dotRadiusMax;
-//   }
-// }
 
 class _ReflectedText extends StatelessWidget {
   const _ReflectedText({
