@@ -10,16 +10,10 @@ class AppTheme {
       secondary: AppColors.secondary,
       surface: AppColors.surface,
       error: AppColors.error,
-<<<<<<< HEAD
-      onPrimary: AppColors.onDark,
-      onBackground: AppColors.onLight,
-      onSurface: AppColors.onLight,
-=======
       onPrimary: AppColors.textDarkTheme,
       onSecondary: AppColors.textDarkTheme,
       onSurface: AppColors.textWhiteTheme,
       onError: AppColors.textDarkTheme,
->>>>>>> 2037736839e5e043d1979343e157b93c3aa009e1
     ),
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
@@ -27,15 +21,15 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primary,
       elevation: 0,
-      foregroundColor: AppColors.onDark,
+      foregroundColor: AppColors.textWhiteTheme,
     ),
 
     // <-- use centralized styles
-    textTheme: AppTextStyles.textTheme,
+    textTheme: ThemeData.light().textTheme,
 
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColors.primary,
-      foregroundColor: AppColors.onDark,
+      foregroundColor: AppColors.textWhiteTheme,
     ),
   );
 
@@ -46,25 +40,19 @@ class AppTheme {
       secondary: AppColors.secondary,
       surface: AppColors.surfaceDark,
       error: AppColors.error,
-<<<<<<< HEAD
-      onPrimary: AppColors.onDark,
-      onBackground: AppColors.onDark,
-      onSurface: AppColors.onDark,
-=======
       onPrimary: AppColors.textDarkTheme,
       onSecondary: AppColors.textDarkTheme,
       onSurface: AppColors.textDarkTheme,
       onError: AppColors.textDarkTheme,
->>>>>>> 2037736839e5e043d1979343e157b93c3aa009e1
     ),
     scaffoldBackgroundColor: AppColors.surfaceDark,
     cardColor: AppColors.surfaceDark,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.surfaceDark,
-      foregroundColor: AppColors.onDark,
+      foregroundColor: AppColors.textWhiteTheme,
     ),
 
     // dark theme reuse (adjust if you want different sizes/colors)
-    textTheme: AppTextStyles.textTheme,
+    textTheme: ThemeData.dark().textTheme,
   );
 }

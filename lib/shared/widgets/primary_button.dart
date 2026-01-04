@@ -13,14 +13,14 @@ class PrimaryButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.onDark,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       onPressed: onPressed,
       child: Text(
         text,
-        style: AppTextStyles.bodyLarge.copyWith(color: AppColors.onDark),
+        style: (Theme.of(context).textTheme.bodyLarge ?? const TextStyle()).copyWith(color: Theme.of(context).colorScheme.onPrimary),
       ),
     );
   }

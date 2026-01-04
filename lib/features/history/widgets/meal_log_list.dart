@@ -1,162 +1,83 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-
-class MealDay {
-  final String title;
-  final String subtitle;
-  final int score;
-  final int green;
-  final int yellow;
-  final int red;
-
-  MealDay({
-    required this.title,
-    required this.subtitle,
-    required this.score,
-    required this.green,
-    required this.yellow,
-    required this.red,
-  });
-}
 
 class MealLogList extends StatelessWidget {
-  final List<MealDay> days;
-  const MealLogList({Key? key, this.days = const []}) : super(key: key);
+  const MealLogList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (days.isEmpty) {
-      return _emptyState(context);
-    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Today', style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
 
-    return ListView.separated(
-      itemCount: days.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
-      itemBuilder: (context, index) {
-        final d = days[index];
-        return _buildDayCard(context, d);
-      },
+        _mealCard(meals: '1 meal', score: 4),
+
+        const SizedBox(height: 12),
+
+        const Text(
+          'Mon, Dec 29',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+
+        _mealCard(meals: '3 meals', score: 4),
+      ],
     );
   }
 
-  Widget _emptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 48),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              shape: BoxShape.circle,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 6,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.calendar_today,
-              size: 36,
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(height: 18),
-          Text(
-            'No meals logged yet',
-            style: AppTextStyles.titleLarge.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Start logging meals to see your history',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.secondary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDayCard(BuildContext context, MealDay day) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.section,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _mealCard({required String meals, required int score}) {
+    return Card(
+      color: AppColors.section,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
+                Expanded(child: Text(meals)),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      day.title,
-                      style: AppTextStyles.titleLarge.copyWith(
-                        color: AppColors.onLight,
-                      ),
+                  children: List.generate(
+                    5,
+                    (index) => Icon(
+                      Icons.eco,
+                      size: 16,
+                      color: index < score
+                          ? AppColors.primary
+                          : AppColors.secondary.withOpacity(0.4),
                     ),
-                    Text(
-                      '${day.score > 0 ? '+' : ''}${day.score}',
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.onLight,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  day.subtitle,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.secondary,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    _pill(Icons.circle, AppColors.primary, '${day.green}'),
-                    const SizedBox(width: 8),
-                    _pill(Icons.circle, Colors.orange, '${day.yellow}'),
-                    const SizedBox(width: 8),
-                    _pill(Icons.circle, Colors.red, '${day.red}'),
-                  ],
-                ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _foodIcon('assets/images/Vegies.png'),
+                const SizedBox(width: 8),
+                _foodIcon('assets/images/meat.png'),
+                const SizedBox(width: 8),
+                _foodIcon('assets/images/cookie.png'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _pill(IconData icon, Color color, String label) {
+  Widget _foodIcon(String assetPath) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      width: 40,
+      height: 40,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
-        children: [
-          Icon(icon, size: 14, color: color),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: AppTextStyles.caption.copyWith(color: AppColors.onLight),
-          ),
-        ],
-      ),
+      child: Image.asset(assetPath, fit: BoxFit.contain),
     );
   }
 }

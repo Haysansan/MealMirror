@@ -155,7 +155,6 @@ class _InstructionScreenState extends State<InstructionScreen> {
   }
 }
 
-
 class _InstructionHero extends StatelessWidget {
   const _InstructionHero({
     super.key,

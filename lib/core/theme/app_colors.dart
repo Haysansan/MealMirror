@@ -4,7 +4,6 @@ class AppColors {
   // Text contrast helpers
   static const Color onLight = Color(0xFF1F2D0C);
   static const Color onDark = Color(0xFFFFFFFF);
-
   // Core brand
   static const Color primary = Color(0xFF5B6E3F); // olive green
   static const Color secondary = Color(0xFF8A9662); // soft olive
