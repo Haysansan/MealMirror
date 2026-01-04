@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-// InstructionScreen
-// └─ Column
-// ├─ ProgressRing
-// ├─ Illustration / PetAvatar
-// ├─ Text (Instruction)
-// └─ PrimaryButton
-=======
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -85,4 +78,3 @@ class InstructionScreen extends StatelessWidget {
     );
   }
 }
->>>>>>> 2037736839e5e043d1979343e157b93c3aa009e1
