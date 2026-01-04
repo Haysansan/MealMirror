@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-// AppScaffold
-// └─ Column
-// ├─ SectionHeader (History)
-// ├─ HistoryFilterTabs
-// ├─ HistoryStatCard
-// └─ MealLogList
-=======
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -104,4 +96,3 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 }
->>>>>>> 4777f7c8b19bffbe00830695055fb8ed5bf137de

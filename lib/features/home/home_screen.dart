@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-// AppScaffold
-// └─ Column
-// ├─ SectionHeader (Greeting)
-// ├─ PetAvatar
-// ├─ DailySummaryCard
-// ├─ StatBar (Calories / Protein / etc.)
-// ├─ QuickActionRow
-// └─ BottomNav
-=======
 import 'package:flutter/material.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../../shared/widgets/pet_avatar.dart';
@@ -39,4 +29,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
->>>>>>> 4777f7c8b19bffbe00830695055fb8ed5bf137de
