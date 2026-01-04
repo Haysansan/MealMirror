@@ -1,6 +1,6 @@
-InstructionScreen
-└─ Column
-├─ ProgressRing
-├─ Illustration / PetAvatar
-├─ Text (Instruction)
-└─ PrimaryButton
+// InstructionScreen
+// └─ Column
+// ├─ ProgressRing
+// ├─ Illustration / PetAvatar
+// ├─ Text (Instruction)
+// └─ PrimaryButton

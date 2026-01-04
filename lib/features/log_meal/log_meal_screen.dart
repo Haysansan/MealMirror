@@ -1,7 +1,230 @@
-AppScaffold
-└─ Column
-├─ SectionHeader (Log Meal)
-├─ MealInputCard
-├─ NutritionSelector
-├─ NutritionCard (Preview)
-└─ PrimaryButton (Save)
+import 'package:flutter/material.dart';
+
+import 'widgets/meal_input_card.dart';
+import 'portion_size_screen.dart';
+
+void main() {
+  runApp(const LogMealDemoApp());
+}
+
+class LogMealDemoApp extends StatelessWidget {
+  const LogMealDemoApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
+      ),
+      home: const LogMealScreen(),
+    );
+  }
+}
+
+class LogMealScreen extends StatefulWidget {
+  const LogMealScreen({super.key});
+
+  @override
+  State<LogMealScreen> createState() => _LogMealScreenState();
+}
+
+class _LogMealScreenState extends State<LogMealScreen> {
+  final Set<String> _selectedCategories = <String>{};
+
+  void _setCategorySelected(String category, bool selected) {
+    setState(() {
+      if (selected) {
+        _selectedCategories.add(category);
+      } else {
+        _selectedCategories.remove(category);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool canContinue = _selectedCategories.isNotEmpty;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7EFDA),
+      body: SafeArea(
+        child: Center(
+          child: SizedBox(
+            width: 402,
+            height: 874,
+            child: Stack(
+              children: [
+                const Positioned(
+                  left: 26,
+                  top: 50,
+                  child: SizedBox(
+                    width: 180,
+                    height: 34,
+                    child: Text(
+                      'Log a Meal',
+                      style: TextStyle(
+                        color: Color(0x590E1A00),
+                        fontSize: 32,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w700,
+                        height: 1.06,
+                      ),
+                    ),
+                  ),
+                ),
+                const Positioned(
+                  left: 26,
+                  top: 98,
+                  child: SizedBox(
+                    width: 349,
+                    height: 51,
+                    child: Text(
+                      'Select a food category',
+                      style: TextStyle(
+                        color: Color(0xFF7B8551) /* Matcha */,
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 1.52,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 26,
+                  top: 149,
+                  child: SizedBox(
+                    width: 349,
+                    child: Wrap(
+                      spacing: 27,
+                      runSpacing: 18,
+                      children: [
+                        MealInputCard(
+                          title: 'Veggie & Fruits',
+                          icon: Image.asset('assets/images/Vegies.png'),
+                          color: const Color(0xFF72B135),
+                          selected: _selectedCategories.contains(
+                            'Veggie & Fruits',
+                          ),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Veggie & Fruits', value),
+                        ),
+                        MealInputCard(
+                          title: 'Grain & Starches',
+                          icon: Image.asset('assets/images/Bread.png'),
+                          color: const Color(0xFFF7C480),
+                          selected: _selectedCategories.contains(
+                            'Grain & Starches',
+                          ),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Grain & Starches', value),
+                        ),
+                        MealInputCard(
+                          title: 'Meat & Seafood',
+                          icon: Image.asset('assets/images/meat.png'),
+                          color: const Color(0xFFFF9A8F),
+                          selected: _selectedCategories.contains(
+                            'Meat & Seafood',
+                          ),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Meat & Seafood', value),
+                        ),
+                        MealInputCard(
+                          title: 'Plant Protein',
+                          icon: Image.asset('assets/images/Tomato.png'),
+                          color: const Color.fromARGB(255, 255, 216, 210),
+                          selected: _selectedCategories.contains(
+                            'Plant Protein',
+                          ),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Plant Protein', value),
+                        ),
+                        MealInputCard(
+                          title: 'Dairy & Eggs',
+                          icon: Image.asset('assets/images/Egg.png'),
+                          color: const Color.fromARGB(255, 255, 222, 100),
+                          selected: _selectedCategories.contains(
+                            'Dairy & Eggs',
+                          ),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Dairy & Eggs', value),
+                        ),
+                        MealInputCard(
+                          title: 'Oils & Fats',
+                          icon: Image.asset('assets/images/cheese.png'),
+                          color: const Color(0xFFFFDFA1),
+                          selected: _selectedCategories.contains('Oils & Fats'),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Oils & Fats', value),
+                        ),
+                        MealInputCard(
+                          title: 'Snacks',
+                          icon: Image.asset('assets/images/cookie.png'),
+                          color: const Color(0xFFF39624),
+                          selected: _selectedCategories.contains('Snacks'),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Snacks', value),
+                        ),
+                        MealInputCard(
+                          title: 'Beverages',
+                          icon: Image.asset('assets/images/beverages.png'),
+                          color: const Color.fromARGB(255, 213, 255, 253),
+                          selected: _selectedCategories.contains('Beverages'),
+                          onSelectedChanged: (value) =>
+                              _setCategorySelected('Beverages', value),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 26,
+                  top: 672,
+                  child: SizedBox(
+                    width: 349.43,
+                    height: 60,
+                    child: Opacity(
+                      opacity: canContinue ? 1 : 0.55,
+                      child: Material(
+                        color: const Color(0xFFCADBB7),
+                        borderRadius: BorderRadius.circular(10),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: canContinue
+                              ? () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => PortionSizeScreen(
+                                        selectedCategories: _selectedCategories
+                                            .toList(),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              : null,
+                          child: const Center(
+                            child: Text(
+                              'Continue',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xFF485935),
+                                fontSize: 17,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                height: 1.50,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

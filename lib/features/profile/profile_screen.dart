@@ -1,6 +1,6 @@
-AppScaffold
-└─ Column
-├─ ProfileHeader
-├─ ProfileStatRow
-├─ NutritionCard (Goals)
-└─ SettingsList
+// AppScaffold
+// └─ Column
+// ├─ ProfileHeader
+// ├─ ProfileStatRow
+// ├─ NutritionCard (Goals)
+// └─ SettingsList
