@@ -90,6 +90,10 @@ flutter:
     - assets/images/Egg.png
     - assets/images/Bread.png
     - assets/images/Vegies.png
+    - assets/images/meat.png
+    - assets/images/cheese.png
+    - assets/images/beverages.png
+    - assets/images/cookie.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

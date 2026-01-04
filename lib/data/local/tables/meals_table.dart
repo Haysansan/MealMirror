@@ -1,1 +1,1 @@
-import 'package:drift/drift.dart';
+// TODO: implement meals table (Drift)
