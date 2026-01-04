@@ -22,6 +22,12 @@ class AppTextStyles {
     color: AppColors.onLight,
   );
 
+  static const TextStyle titleSmall = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.onLight,
+  );
+
   static const TextStyle bodyLarge = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
@@ -30,6 +36,12 @@ class AppTextStyles {
 
   static const TextStyle bodyMedium = TextStyle(
     fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onLight,
+  );
+
+  static const TextStyle bodySmall = TextStyle(
+    fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.onLight,
   );
@@ -44,8 +56,9 @@ class AppTextStyles {
     headlineLarge: headlineLarge,
     headlineMedium: headlineMedium,
     titleLarge: titleLarge,
+    titleSmall: titleSmall,
     bodyLarge: bodyLarge,
     bodyMedium: bodyMedium,
-    bodySmall: caption,
+    bodySmall: bodySmall,
   );
 }

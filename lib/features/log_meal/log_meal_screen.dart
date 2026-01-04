@@ -3,8 +3,6 @@ import '../../shared/widgets/app_scaffold.dart';
 import '../../shared/widgets/primary_button.dart';
 import 'widgets/meal_input_card.dart';
 import 'widgets/nutrition_selector.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
 
 class LogMealScreen extends StatefulWidget {
   const LogMealScreen({Key? key}) : super(key: key);

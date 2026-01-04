@@ -69,7 +69,7 @@ class ProcessingSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = [
+    final List<Map<String, String>> options = [
       {'label': 'Whole', 'desc': 'Unrefined, close to natural state.'},
       {
         'label': 'Processed',
@@ -84,8 +84,8 @@ class ProcessingSelector extends StatelessWidget {
         Text('How processed is this meal?', style: AppTextStyles.titleLarge),
         const SizedBox(height: 12),
         ...options.map((o) {
-          final label = o['label']! as String;
-          final desc = o['desc']! as String;
+          final label = o['label']!;
+          final desc = o['desc']!;
           final selected = label == value;
           return GestureDetector(
             onTap: () => onChanged(label),
