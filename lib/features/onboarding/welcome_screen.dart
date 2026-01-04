@@ -26,7 +26,7 @@ class WelcomeScreen extends StatelessWidget {
 
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => context.go('/instruction'),
+                  onTap: () => context.push('/instruction'),
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Column(
@@ -90,17 +90,23 @@ class _WelcomeHero extends StatelessWidget {
           Positioned(
             left: 26,
             top: (viewportHeight * 0.12).clamp(24, 92),
-            child: const Opacity(
-              opacity: 0.72,
-              child: Text(
-                'your\nhabits,\nreflected',
-                style: TextStyle(
-                  color: AppColors.matcha,
-                  fontSize: 34,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w200,
-                  height: 1.18,
-                  letterSpacing: 8,
+            child: Hero(
+              tag: 'onboarding_headline',
+              child: const Material(
+                color: Colors.transparent,
+                child: Opacity(
+                  opacity: 0.72,
+                  child: Text(
+                    'your\nhabits,\nreflected',
+                    style: TextStyle(
+                      color: AppColors.matcha,
+                      fontSize: 34,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w200,
+                      height: 1.18,
+                      letterSpacing: 8,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -108,12 +114,15 @@ class _WelcomeHero extends StatelessWidget {
           Positioned(
             top: petTop,
             left: (viewportWidth - petSize) / 2,
-            child: SizedBox(
-              width: petSize,
-              height: petSize,
-              child: Image.asset(
-                'assets/images/MealMirrorPet.png',
-                fit: BoxFit.contain,
+            child: Hero(
+              tag: 'onboarding_pet',
+              child: SizedBox(
+                width: petSize,
+                height: petSize,
+                child: Image.asset(
+                  'assets/images/MealMirrorPet.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
@@ -198,13 +207,13 @@ class _SoftCircle extends StatelessWidget {
           IgnorePointer(
             child: CustomPaint(
               size: Size(diameter, diameter),
-              painter: _NoiseRingPainter(
-                color: noiseColor,
-                count: 760,
-                jitter: 9.5,
-                dotRadiusMin: 0.35,
-                dotRadiusMax: 0.95,
-              ),
+              // painter: _NoiseRingPainter(
+              //   color: noiseColor,
+              //   count: 760,
+              //   jitter: 9.5,
+              //   dotRadiusMin: 0.35,
+              //   dotRadiusMax: 0.95,
+              // ),
             ),
           ),
         ],
@@ -213,55 +222,55 @@ class _SoftCircle extends StatelessWidget {
   }
 }
 
-class _NoiseRingPainter extends CustomPainter {
-  _NoiseRingPainter({
-    required this.color,
-    required this.count,
-    required this.jitter,
-    required this.dotRadiusMin,
-    required this.dotRadiusMax,
-  });
+// class _NoiseRingPainter extends CustomPainter {
+//   _NoiseRingPainter({
+//     required this.color,
+//     required this.count,
+//     required this.jitter,
+//     required this.dotRadiusMin,
+//     required this.dotRadiusMax,
+//   });
 
-  final Color color;
-  final int count;
-  final double jitter;
-  final double dotRadiusMin;
-  final double dotRadiusMax;
+//   final Color color;
+//   final int count;
+//   final double jitter;
+//   final double dotRadiusMin;
+//   final double dotRadiusMax;
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double radius = size.shortestSide / 2;
-    final Offset center = Offset(size.width / 2, size.height / 2);
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final double radius = size.shortestSide / 2;
+//     final Offset center = Offset(size.width / 2, size.height / 2);
 
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+//     final paint = Paint()
+//       ..color = color
+//       ..style = PaintingStyle.fill;
 
-    final int seed = (radius * 1000).round();
-    final random = math.Random(seed);
+//     final int seed = (radius * 1000).round();
+//     final random = math.Random(seed);
 
-    for (int i = 0; i < count; i++) {
-      final double angle = random.nextDouble() * math.pi * 2;
-      final double localJitter = (random.nextDouble() - 0.5) * jitter;
-      final double r = radius + localJitter;
-      final Offset p =
-          center + Offset(math.cos(angle) * r, math.sin(angle) * r);
+//     for (int i = 0; i < count; i++) {
+//       final double angle = random.nextDouble() * math.pi * 2;
+//       final double localJitter = (random.nextDouble() - 0.5) * jitter;
+//       final double r = radius + localJitter;
+//       final Offset p =
+//           center + Offset(math.cos(angle) * r, math.sin(angle) * r);
 
-      final double dotRadius =
-          dotRadiusMin + random.nextDouble() * (dotRadiusMax - dotRadiusMin);
-      canvas.drawCircle(p, dotRadius, paint);
-    }
-  }
+//       final double dotRadius =
+//           dotRadiusMin + random.nextDouble() * (dotRadiusMax - dotRadiusMin);
+//       canvas.drawCircle(p, dotRadius, paint);
+//     }
+//   }
 
-  @override
-  bool shouldRepaint(covariant _NoiseRingPainter oldDelegate) {
-    return oldDelegate.color != color ||
-        oldDelegate.count != count ||
-        oldDelegate.jitter != jitter ||
-        oldDelegate.dotRadiusMin != dotRadiusMin ||
-        oldDelegate.dotRadiusMax != dotRadiusMax;
-  }
-}
+//   @override
+//   bool shouldRepaint(covariant _NoiseRingPainter oldDelegate) {
+//     return oldDelegate.color != color ||
+//         oldDelegate.count != count ||
+//         oldDelegate.jitter != jitter ||
+//         oldDelegate.dotRadiusMin != dotRadiusMin ||
+//         oldDelegate.dotRadiusMax != dotRadiusMax;
+//   }
+// }
 
 class _ReflectedText extends StatelessWidget {
   const _ReflectedText({

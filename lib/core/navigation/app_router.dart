@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Screens
@@ -17,10 +18,33 @@ import '../../data/local/preferences/app_preferences.dart';
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: '/', builder: (context, state) => const WelcomeScreen()),
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(child: WelcomeScreen());
+      },
+    ),
     GoRoute(
       path: '/instruction',
-      builder: (context, state) => const InstructionScreen(),
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 320),
+          reverseTransitionDuration: const Duration(milliseconds: 260),
+          child: const InstructionScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final curved = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOut,
+            );
+
+            return FadeTransition(
+              opacity: Tween<double>(begin: 0.0, end: 1.0).animate(curved),
+              child: child,
+            );
+          },
+        );
+      },
     ),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(
