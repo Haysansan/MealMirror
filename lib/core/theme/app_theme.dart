@@ -1,60 +1,56 @@
-// import 'package:flutter/material.dart';
-// import 'app_colors.dart';
-//
-// class AppTheme {
-//   static final ThemeData lightTheme = ThemeData(
-//     colorScheme: ColorScheme.light(
-//       primary: AppColors.primary,
-//       secondary: AppColors.secondary,
-//       background: AppColors.background,
-//       surface: AppColors.surface,
-//       error: AppColors.error,
-//       onPrimary: AppColors.textDarkTheme,
-//       onBackground: AppColors.textWhiteTheme,
-//       onSurface: AppColors.textWhiteTheme,
-//     ),
-//     scaffoldBackgroundColor: AppColors.background,
-//     primaryColor: AppColors.primary,
-//     cardColor: AppColors.surface,
-//     appBarTheme: const AppBarTheme(
-//       backgroundColor: AppColors.primary,
-//       elevation: 0,
-//       foregroundColor: AppColors.textDarkTheme,
-//     ),
-//     textTheme: const TextTheme(
-//       headlineLarge: TextStyle(
-//         color: AppColors.primary,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       headlineMedium: TextStyle(
-//         color: AppColors.primary,
-//         fontWeight: FontWeight.w600,
-//       ),
-//       bodyLarge: TextStyle(color: AppColors.textWhiteTheme),
-//       bodyMedium: TextStyle(color: AppColors.textWhiteTheme),
-//     ),
-//     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-//       backgroundColor: AppColors.primary,
-//       foregroundColor: AppColors.textDarkTheme,
-//     ),
-//   );
-//
-//   static final ThemeData darkTheme = ThemeData(
-//     colorScheme: ColorScheme.dark(
-//       primary: AppColors.primary,
-//       secondary: AppColors.secondary,
-//       background: AppColors.section,
-//       surface: AppColors.surfaceDark,
-//       error: AppColors.error,
-//       onPrimary: AppColors.textWhiteTheme,
-//       onBackground: AppColors.textDarkTheme,
-//       onSurface: AppColors.textDarkTheme,
-//     ),
-//     scaffoldBackgroundColor: AppColors.section,
-//     cardColor: AppColors.surfaceDark,
-//     appBarTheme: const AppBarTheme(
-//       backgroundColor: AppColors.surfaceDark,
-//       foregroundColor: AppColors.textWhiteTheme,
-//     ),
-//   );
-// }
+import 'package:flutter/material.dart';
+import 'app_colors.dart';
+import 'app_text_styles.dart';
+
+class AppTheme {
+  static final ThemeData lightTheme = ThemeData(
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      background: AppColors.background,
+      surface: AppColors.surface,
+      error: AppColors.error,
+      onPrimary: AppColors.onDark,
+      onBackground: AppColors.onLight,
+      onSurface: AppColors.onLight,
+    ),
+    scaffoldBackgroundColor: AppColors.background,
+    primaryColor: AppColors.primary,
+    cardColor: AppColors.surface,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primary,
+      elevation: 0,
+      foregroundColor: AppColors.onDark,
+    ),
+
+    // <-- use centralized styles
+    textTheme: AppTextStyles.textTheme,
+
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: AppColors.primary,
+      foregroundColor: AppColors.onDark,
+    ),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      background: AppColors.section,
+      surface: AppColors.surfaceDark,
+      error: AppColors.error,
+      onPrimary: AppColors.onDark,
+      onBackground: AppColors.onDark,
+      onSurface: AppColors.onDark,
+    ),
+    scaffoldBackgroundColor: AppColors.section,
+    cardColor: AppColors.surfaceDark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.surfaceDark,
+      foregroundColor: AppColors.onDark,
+    ),
+
+    // dark theme reuse (adjust if you want different sizes/colors)
+    textTheme: AppTextStyles.textTheme,
+  );
+}
