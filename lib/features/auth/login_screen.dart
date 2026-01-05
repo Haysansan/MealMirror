@@ -75,7 +75,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 child: Center(
-                  child: Image.asset('assets/images/MealMirrorPet.png', height: 100),
+                  child: Image.asset(
+                    'assets/images/MealMirrorPet.png',
+                    height: 100,
+                  ),
                 ),
               ),
 

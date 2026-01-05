@@ -1,17 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/signup_screen.dart';
 import '../../features/home/home_screen.dart';
-import '../../features/log_meal/log_meal_flow_args.dart';
 import '../../features/log_meal/log_meal_screen.dart';
-import '../../features/log_meal/portion_size_screen.dart';
-import '../../features/log_meal/processing_level_screen.dart';
-import '../../features/onboarding/instruction_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/profile/profile_screen.dart';
-import '../../features/onboarding/welcome_screen.dart';
+import '../../features/history/history_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
