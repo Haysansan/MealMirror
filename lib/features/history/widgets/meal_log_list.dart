@@ -99,14 +99,29 @@ class MealLogList extends StatelessWidget {
                         : '${entry.categories.length} categories',
                   ),
                 ),
-                Text(
-                  _formatSigned(entry.points),
-                  style: const TextStyle(
-                    color: AppColors.mealMirrorText,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      _formatSigned(entry.points),
+                      style: const TextStyle(
+                        color: AppColors.mealMirrorText,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                      ),
+                    ),
+                    if (entry.nutriScore != null)
+                      Text(
+                        'Nutri-Score ${entry.nutriScore}',
+                        style: const TextStyle(
+                          color: AppColors.mealMirrorMutedText,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),

@@ -13,6 +13,8 @@ class MealEntry {
     required this.portion,
     required this.processing,
     required this.points,
+    this.nutriScore,
+    this.scoreVersion = 1,
   });
 
   final String id;
@@ -28,6 +30,27 @@ class MealEntry {
   /// Note: nutrition bars are computed separately from category mapping.
   final int points;
 
+  /// Estimated Nutri-Score letter (A–E) based on in-app categories.
+  /// This is a lightweight proxy, not the official algorithm.
+  final String? nutriScore;
+
+  /// Scoring system version used to compute [points]/[nutriScore].
+  final int scoreVersion;
+
+  MealEntry copyWith({int? points, String? nutriScore, int? scoreVersion}) {
+    return MealEntry(
+      id: id,
+      date: date,
+      createdAt: createdAt,
+      categories: categories,
+      portion: portion,
+      processing: processing,
+      points: points ?? this.points,
+      nutriScore: nutriScore ?? this.nutriScore,
+      scoreVersion: scoreVersion ?? this.scoreVersion,
+    );
+  }
+
   Map<String, Object?> toJson() {
     return {
       'id': id,
@@ -37,6 +60,8 @@ class MealEntry {
       'portion': portion,
       'processing': processing,
       'points': points,
+      'nutriScore': nutriScore,
+      'scoreVersion': scoreVersion,
     };
   }
 
@@ -51,6 +76,8 @@ class MealEntry {
       portion: (json['portion'] as String?) ?? 'Normal',
       processing: (json['processing'] as String?) ?? 'Processed',
       points: (json['points'] as num?)?.toInt() ?? 0,
+      nutriScore: json['nutriScore'] as String?,
+      scoreVersion: (json['scoreVersion'] as num?)?.toInt() ?? 1,
     );
   }
 }
@@ -99,6 +126,9 @@ class MealStore {
   // 5 steps = 100%. Each +1 step -> 20%.
   static const int maxBarSteps = 5;
 
+  // Bump this when changing point logic to migrate existing stored meals.
+  static const int _scoreSystemVersion = 2;
+
   static String _userMealsKey(String username) => 'meals_$username';
 
   static String _dateKey(DateTime dt) {
@@ -133,14 +163,49 @@ class MealStore {
       final decoded = jsonDecode(raw);
       if (decoded is! List) return const [];
       final entries = <MealEntry>[];
+      var needsMigration = false;
       for (final item in decoded) {
         if (item is Map) {
           final map = item.map((k, v) => MapEntry(k.toString(), v));
-          entries.add(MealEntry.fromJson(map));
+          var entry = MealEntry.fromJson(map);
+          if (entry.scoreVersion != _scoreSystemVersion) {
+            final estimated = estimateNutriScore(
+              categories: entry.categories,
+              processing: entry.processing,
+            );
+            final points = computeMealPoints(
+              categories: entry.categories,
+              portion: entry.portion,
+              processing: entry.processing,
+            );
+            entry = entry.copyWith(
+              nutriScore: estimated,
+              points: points,
+              scoreVersion: _scoreSystemVersion,
+            );
+            needsMigration = true;
+          } else if (entry.nutriScore == null) {
+            entry = entry.copyWith(
+              nutriScore: estimateNutriScore(
+                categories: entry.categories,
+                processing: entry.processing,
+              ),
+            );
+            needsMigration = true;
+          }
+
+          entries.add(entry);
         }
       }
       // Newest first
       entries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+      if (needsMigration) {
+        await prefs.setString(
+          _userMealsKey(username),
+          jsonEncode(entries.map((e) => e.toJson()).toList()),
+        );
+      }
       return entries;
     } catch (_) {
       return const [];
@@ -156,6 +221,10 @@ class MealStore {
     if (username == null || username.isEmpty) return;
 
     final now = DateTime.now();
+    final estimated = estimateNutriScore(
+      categories: categories,
+      processing: processing,
+    );
     final entry = MealEntry(
       id: now.microsecondsSinceEpoch.toString(),
       date: _dateKey(now),
@@ -168,6 +237,8 @@ class MealStore {
         portion: portion,
         processing: processing,
       ),
+      nutriScore: estimated,
+      scoreVersion: _scoreSystemVersion,
     );
 
     final meals = (await loadMeals(username)).toList();
@@ -247,33 +318,78 @@ class MealStore {
   }
 
   // ===================== POINT SYSTEM (EDIT HERE) =====================
-  // Placeholder scoring:
-  // - +1 per selected category
-  // - except negative categories: Snacks, Oils & Fats => -1 each
-  // - multiplied by portion: Small=1, Normal=2, Large=3
-  // - multiplied by processing: Whole=+1, Processed=0, Ultra-Processed=-1
-  // - applied equally to all 5 dimensions (we store a single total points value)
+  // Estimated Nutri-Score proxy (A–E) derived from in-app categories.
+  // Then points are derived from the letter grade and scaled by portion.
+  // This intentionally allows negative points for D/E meals.
   static int computeMealPoints({
     required List<String> categories,
     required String portion,
     required String processing,
   }) {
-    const negativeCategories = <String>{'snacks', 'oils & fats'};
+    final nutriScore = estimateNutriScore(
+      categories: categories,
+      processing: processing,
+    );
 
-    int base = 0;
-    for (final category in categories) {
-      final key = category.trim().toLowerCase();
-      base += negativeCategories.contains(key) ? -1 : 1;
-    }
-
-    final int portionMultiplier = switch (portion.trim().toLowerCase()) {
-      'small' => 1,
-      'normal' => 2,
-      'large' => 3,
-      _ => 1,
+    final int basePoints = switch (nutriScore) {
+      'A' => 5,
+      'B' => 3,
+      'C' => 1,
+      'D' => -1,
+      'E' => -2,
+      _ => 0,
     };
 
-    final int processingMultiplier = switch (processing.trim().toLowerCase()) {
+    final double portionMultiplier = switch (portion.trim().toLowerCase()) {
+      'small' => 1.0,
+      'normal' => 1.2,
+      'large' => 1.5,
+      _ => 1.0,
+    };
+
+    return (basePoints * portionMultiplier).round();
+  }
+
+  static String estimateNutriScore({
+    required List<String> categories,
+    required String processing,
+  }) {
+    // Start at C (0). Positive values move toward A, negative toward E.
+    var score = 0;
+
+    for (final category in categories) {
+      final key = category.trim().toLowerCase();
+      switch (key) {
+        case 'veggie & fruits':
+          score += 2;
+          break;
+        case 'plant protein':
+          score += 2;
+          break;
+        case 'grain & starches':
+          score += 1;
+          break;
+        case 'meat & seafood':
+          score += 0;
+          break;
+        case 'dairy & eggs':
+          score += 0;
+          break;
+        case 'oils & fats':
+          score -= 1;
+          break;
+        case 'snacks':
+          score -= 2;
+          break;
+        case 'beverages':
+          score += 0;
+          break;
+        default:
+          break;
+      }
+    }
+
+    score += switch (processing.trim().toLowerCase()) {
       'whole' => 1,
       'processed' => 0,
       'ultra-processed' => -1,
@@ -281,7 +397,11 @@ class MealStore {
       _ => 0,
     };
 
-    return base * portionMultiplier * processingMultiplier;
+    if (score >= 3) return 'A';
+    if (score >= 1) return 'B';
+    if (score == 0) return 'C';
+    if (score >= -2) return 'D';
+    return 'E';
   }
 
   // ===================== NUTRITION BAR SYSTEM (EDIT HERE) =====================
