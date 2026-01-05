@@ -2,15 +2,22 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
 class QuickActionRow extends StatelessWidget {
-  const QuickActionRow({super.key});
+  const QuickActionRow({
+    super.key,
+    required this.todayValue,
+    required this.weekAvgValue,
+  });
+
+  final String todayValue;
+  final String weekAvgValue;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _actionCard('Today', '+0'),
+        _actionCard('Today', todayValue),
         const SizedBox(width: 12),
-        _actionCard('Week AVG', '+0'),
+        _actionCard('Week AVG', weekAvgValue),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../data/local/meal_store.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import 'widgets/nutrition_selector.dart';
 import 'widgets/selection_pill.dart';
@@ -22,6 +23,7 @@ class ProcessingLevelScreen extends StatefulWidget {
 
 class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
   String? _selectedProcessing;
+  bool _isSaving = false;
 
   void _toggleProcessing(String value) {
     setState(() {
@@ -29,13 +31,27 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
     });
   }
 
-  void _addMeal() {
+  Future<void> _addMeal() async {
+    final processing = _selectedProcessing;
+    if (processing == null || _isSaving) return;
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    await MealStore.addMealForCurrentUser(
+      categories: widget.selectedCategories,
+      portion: widget.selectedPortion,
+      processing: processing,
+    );
+
+    if (!mounted) return;
     context.go('/home');
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool canAddMeal = _selectedProcessing != null;
+    final bool canAddMeal = _selectedProcessing != null && !_isSaving;
 
     return AppScaffold(
       body: Container(

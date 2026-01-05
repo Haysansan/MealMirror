@@ -1,33 +1,86 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
+import '../../../data/local/meal_store.dart';
+
 class MealLogList extends StatelessWidget {
-  const MealLogList({super.key});
+  const MealLogList({super.key, required this.meals, required this.now});
+
+  final List<MealEntry> meals;
+  final DateTime now;
+
+  String _dateKey(DateTime dt) {
+    final y = dt.year.toString().padLeft(4, '0');
+    final m = dt.month.toString().padLeft(2, '0');
+    final d = dt.day.toString().padLeft(2, '0');
+    return '$y-$m-$d';
+  }
+
+  String _formatSigned(int value) {
+    if (value == 0) return '+0';
+    return value > 0 ? '+$value' : value.toString();
+  }
+
+  Map<String, List<MealEntry>> _groupByDate(List<MealEntry> input) {
+    final map = <String, List<MealEntry>>{};
+    for (final entry in input) {
+      map.putIfAbsent(entry.date, () => <MealEntry>[]).add(entry);
+    }
+    return map;
+  }
+
+  String _iconForCategory(String category) {
+    return switch (category.trim().toLowerCase()) {
+      'veggie & fruits' => 'assets/images/Vegies.png',
+      'grain & starches' => 'assets/images/Bread.png',
+      'meat & seafood' => 'assets/images/meat.png',
+      'plant protein' => 'assets/images/Tomato.png',
+      'dairy & eggs' => 'assets/images/Egg.png',
+      'oils & fats' => 'assets/images/cheese.png',
+      'snacks' => 'assets/images/cookie.png',
+      'beverages' => 'assets/images/beverages.png',
+      _ => 'assets/images/Vegies.png',
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (meals.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.only(top: 8),
+        child: Text(
+          'No meals logged for this period yet.',
+          style: TextStyle(color: AppColors.mealMirrorMutedText),
+        ),
+      );
+    }
+
+    final grouped = _groupByDate(meals);
+    final keys = grouped.keys.toList()..sort((a, b) => b.compareTo(a));
+    final todayKey = _dateKey(now);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Today', style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-
-        _mealCard(meals: '1 meal', score: 4),
-
-        const SizedBox(height: 12),
-
-        const Text(
-          'Mon, Dec 29',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-
-        _mealCard(meals: '3 meals', score: 4),
+        for (final key in keys) ...[
+          Text(
+            key == todayKey ? 'Today' : key,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          for (final entry in (grouped[key] ?? const <MealEntry>[])) ...[
+            _mealCard(entry: entry),
+            const SizedBox(height: 8),
+          ],
+          const SizedBox(height: 12),
+        ],
       ],
     );
   }
 
-  Widget _mealCard({required String meals, required int score}) {
+  Widget _mealCard({required MealEntry entry}) {
+    final icons = entry.categories.map(_iconForCategory).toSet().toList();
+
     return Card(
       color: AppColors.section,
       child: Padding(
@@ -37,31 +90,33 @@ class MealLogList extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(child: Text(meals)),
-                Row(
-                  children: List.generate(
-                    5,
-                    (index) => Icon(
-                      Icons.eco,
-                      size: 16,
-                      color: index < score
-                          ? AppColors.primary
-                          : AppColors.secondary.withValues(alpha: 0.4),
-                    ),
+                Expanded(
+                  child: Text(
+                    entry.categories.isEmpty
+                        ? 'Meal'
+                        : entry.categories.length == 1
+                        ? '1 category'
+                        : '${entry.categories.length} categories',
+                  ),
+                ),
+                Text(
+                  _formatSigned(entry.points),
+                  style: const TextStyle(
+                    color: AppColors.mealMirrorText,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            Row(
-              children: [
-                _foodIcon('assets/images/Vegies.png'),
-                const SizedBox(width: 8),
-                _foodIcon('assets/images/meat.png'),
-                const SizedBox(width: 8),
-                _foodIcon('assets/images/cookie.png'),
-              ],
-            ),
+            if (icons.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [for (final icon in icons) _foodIcon(icon)],
+              ),
           ],
         ),
       ),

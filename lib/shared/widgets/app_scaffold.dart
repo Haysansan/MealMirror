@@ -7,6 +7,9 @@ class AppScaffold extends StatelessWidget {
   final String? title;
   final Widget? trailing;
   final bool showBottomNav;
+  final Color? appBarBackgroundColor;
+  final TextStyle? titleTextStyle;
+  final bool? centerTitle;
 
   const AppScaffold({
     super.key,
@@ -14,6 +17,9 @@ class AppScaffold extends StatelessWidget {
     this.title,
     this.trailing,
     this.showBottomNav = true,
+    this.appBarBackgroundColor,
+    this.titleTextStyle,
+    this.centerTitle,
   });
 
   @override
@@ -21,7 +27,12 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       appBar: title != null
           ? AppBar(
-              title: Text(title!),
+              backgroundColor: appBarBackgroundColor,
+              surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
+              elevation: 0,
+              centerTitle: centerTitle,
+              title: Text(title!, style: titleTextStyle),
               actions: trailing != null ? [trailing!] : null,
             )
           : null,
