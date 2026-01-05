@@ -26,7 +26,7 @@ class PortionSizeSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final BorderRadius borderRadius = BorderRadius.circular(12.75);
 
-    const Color baseFill = AppColors.portionCardBaseFill;
+    const Color baseFill = AppColors.actionSurface;
     const Color baseBorder = AppColors.portionCardBaseBorder;
     const Color selectedBorder = AppColors.portionCardSelectedBorder;
 
@@ -58,8 +58,8 @@ class PortionSizeSelectionCard extends StatelessWidget {
       ),
     ];
 
-    const Color titleColor = AppColors.ink;
-    const Color descriptionColor = AppColors.inkMuted;
+    const Color titleColor = AppColors.mealMirrorTitle;
+    const Color descriptionColor = AppColors.mealMirrorTitle;
 
     return Material(
       type: MaterialType.transparency,

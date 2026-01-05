@@ -29,7 +29,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
     final bool canContinue = _selectedPortion != null;
 
     return Scaffold(
-      backgroundColor: AppColors.logMealBackground,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
@@ -53,7 +53,7 @@ class _PortionSizeScreenState extends State<PortionSizeScreen> {
                           child: Text(
                             'Portion Size',
                             style: TextStyle(
-                              color: AppColors.logMealTitle,
+                              color: AppColors.mealMirrorTitle,
                               fontSize: 32,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,

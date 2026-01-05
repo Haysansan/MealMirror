@@ -37,7 +37,7 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
     final bool canAddMeal = _selectedProcessing != null;
 
     return Scaffold(
-      backgroundColor: AppColors.logMealBackground,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
@@ -61,7 +61,7 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
                           child: Text(
                             'Processing Levels',
                             style: TextStyle(
-                              color: AppColors.logMealTitle,
+                              color: AppColors.mealMirrorTitle,
                               fontSize: 32,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,
