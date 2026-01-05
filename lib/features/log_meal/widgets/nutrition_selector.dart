@@ -58,8 +58,8 @@ class PortionSizeSelectionCard extends StatelessWidget {
       ),
     ];
 
-    const Color titleColor = AppColors.mealMirrorTitle;
-    const Color descriptionColor = AppColors.mealMirrorTitle;
+    const Color titleColor = AppColors.mealMirrorText;
+    const Color descriptionColor = AppColors.mealMirrorMutedText;
 
     return Material(
       type: MaterialType.transparency,

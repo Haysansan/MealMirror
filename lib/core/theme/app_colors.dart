@@ -20,10 +20,10 @@ class AppColors {
   // Status
   static const Color error = Colors.red;
 
-  // --- Log Meal
+  // --- Text
   static const Color mealMirrorTitle = Color(0x590E1A00);
-  static const Color ink = Color(0xFF0E1A00);
-  static const Color inkMuted = Color(0xA50E1A00);
+  static const Color mealMirrorText = Color(0xFF0E1A00);
+  static const Color mealMirrorMutedText = Color(0xA50E1A00);
 
   static const Color actionSurface = Color(0xFFCADBB7);
 
