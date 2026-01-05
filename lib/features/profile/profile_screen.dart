@@ -1,10 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../shared/widgets/app_scaffold.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/profile_stat_row.dart';
 import '../../core/theme/app_colors.dart';
+import '../../data/local/auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Log out'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Log out'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true && context.mounted) {
+      await AuthService.logout();
+      if (context.mounted) {
+        context.go('/login');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +96,7 @@ class ProfileScreen extends StatelessWidget {
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () => _handleLogout(context),
                     child: const Text('Log out'),
                   ),
                 ),
