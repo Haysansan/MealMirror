@@ -56,29 +56,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1E8),
+      backgroundColor: AppColors.background,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Pet image with glow effect
-              Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withOpacity(0.3),
-                      blurRadius: 80,
-                      spreadRadius: 40,
+              SizedBox(
+                height: 260,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    _SoftCircle(
+                      diameter: 640,
+                      noiseColor: AppColors.actionSurface.withValues(
+                        alpha: 0.25,
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/images/MealMirrorPet.png',
+                      height: 150,
+                      fit: BoxFit.contain,
                     ),
                   ],
-                ),
-                child: Center(
-                  child: Image.asset('assets/images/MealMirrorPet.png', height: 100),
                 ),
               ),
 
@@ -241,6 +242,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SoftCircle extends StatelessWidget {
+  const _SoftCircle({required this.diameter, required this.noiseColor});
+
+  final double diameter;
+  final Color noiseColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color center = AppColors.actionSurface.withValues(alpha: 0.80);
+    final Color mid = AppColors.actionSurface.withValues(alpha: 0.35);
+    final Color edge = AppColors.actionSurface.withValues(alpha: 0.00);
+
+    return SizedBox(
+      width: diameter,
+      height: diameter,
+      child: Stack(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [center, mid, edge],
+                stops: const [0.0, 0.66, 1.0],
+              ),
+            ),
+            child: const SizedBox.expand(),
+          ),
+          IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: noiseColor,
+              ),
+              child: const SizedBox.expand(),
+            ),
+          ),
+        ],
       ),
     );
   }

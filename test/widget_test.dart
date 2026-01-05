@@ -5,24 +5,30 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:mealmirror/main.dart';
+
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MaterialApp());
+  testWidgets('App boots to Welcome screen', (WidgetTester tester) async {
+    await tester.pumpWidget(const MealMirrorApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // AppRouter.initialLocation is '/welcome'
+    expect(find.text('MEAL MIRROR'), findsWidgets);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Tap welcome navigates to instruction', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MealMirrorApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // WelcomeScreen is a full-screen GestureDetector.
+    await tester.tapAt(const Offset(200, 200));
+    await tester.pumpAndSettle();
+
+    // First instruction step text.
+    expect(find.text('ready to be healthier?'), findsOneWidget);
   });
 }

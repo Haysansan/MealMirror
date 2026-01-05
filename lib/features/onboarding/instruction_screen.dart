@@ -37,7 +37,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
   Future<void> _finishOnboarding(BuildContext context) async {
     await AppPreferences.setBool('seenOnboarding', true);
     if (context.mounted) {
-      context.go('/home');
+      context.go('/login');
     }
   }
 
@@ -245,21 +245,30 @@ class _InstructionHero extends StatelessWidget {
             ),
           if (isConversation)
             Positioned.fill(
-              child: _ConversationStep(
-                width: viewportWidth,
-                height: viewportHeight,
-                diameter: diameter,
-                circleLeft: circleLeft,
-                circleTop: circleTop,
-                title: step.title ?? 'MEAL MIRROR',
-                subtitle: step.subtitle ?? 'your habits, reflected',
-                blocks: step.blocks ?? const [],
-                visibleCount: conversationVisibleCount,
-                dotsTop: dotsTop,
-                logoColor: AppColors.petGreen,
-                onDotTap: onDotTap,
-                activeIndex: index,
-                total: total,
+              child: OverflowBox(
+                alignment: Alignment.topCenter,
+                minWidth: 0,
+                maxWidth: double.infinity,
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: viewportHeight,
+                  child: _ConversationStep(
+                    width: viewportWidth,
+                    height: viewportHeight,
+                    diameter: diameter,
+                    circleLeft: circleLeft,
+                    circleTop: circleTop,
+                    title: step.title ?? 'MEAL MIRROR',
+                    subtitle: step.subtitle ?? 'your habits, reflected',
+                    blocks: step.blocks ?? const [],
+                    visibleCount: conversationVisibleCount,
+                    dotsTop: dotsTop,
+                    logoColor: AppColors.petGreen,
+                    onDotTap: onDotTap,
+                    activeIndex: index,
+                    total: total,
+                  ),
+                ),
               ),
             ),
           if (!isConversation && !isStartCta)
@@ -568,6 +577,7 @@ class _StartCtaStep extends StatelessWidget {
     final double taglineTop = (height * 0.80).clamp(650, 730);
 
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Positioned(
           left: circleLeft,
@@ -734,8 +744,41 @@ class _ConversationStep extends StatelessWidget {
       visible.add(const SizedBox(height: 14));
     }
 
+    final double screenWidth = MediaQuery.sizeOf(context).width;
+    final double bgDiameter = (screenWidth * 3.0).clamp(720, 2000);
+    final double bgLeft = (screenWidth - bgDiameter) / 2;
+    final double bgTop = (height * 0.60) - (bgDiameter / 2);
+
     return Stack(
+      clipBehavior: Clip.none,
       children: [
+        Positioned.fill(
+          child: OverflowBox(
+            alignment: Alignment.topCenter,
+            minWidth: screenWidth,
+            maxWidth: screenWidth,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: AppColors.actionSurface.withValues(alpha: 0.18),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: bgLeft,
+                  top: bgTop,
+                  child: _SoftCircle(
+                    diameter: bgDiameter,
+                    noiseColor: AppColors.actionSurface.withValues(alpha: 0.50),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         Positioned(
           left: circleLeft,
           top: circleTop,
@@ -752,7 +795,7 @@ class _ConversationStep extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.petGreen,
                   fontSize: 36,
                   fontFamily: 'Inter',
@@ -765,7 +808,8 @@ class _ConversationStep extends StatelessWidget {
                 opacity: 0.90,
                 child: Text(
                   subtitle,
-                  style: TextStyle(
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     color: AppColors.matcha,
                     fontSize: 12,
                     fontFamily: 'Inter',
@@ -803,26 +847,27 @@ class _ConversationRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLeft = block.side == ConversationSide.left;
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (isLeft)
-          Transform(
+    final bool alignLeft = block.side == ConversationSide.left;
+    // Asset faces left by default. Mirror on the left side so it faces right.
+    final Widget icon = alignLeft
+        ? Transform(
             alignment: Alignment.center,
             transform: Matrix4.diagonal3Values(-1.0, 1.0, 1.0),
             child: _PetIcon(size: iconSize),
           )
-        else
-          SizedBox(width: iconSize),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _ConversationText(block: block, alignLeft: isLeft),
-        ),
-        const SizedBox(width: 10),
-        if (!isLeft) _PetIcon(size: iconSize) else SizedBox(width: iconSize),
-      ],
+        : _PetIcon(size: iconSize);
+    final Widget text = Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: _ConversationText(block: block, alignLeft: alignLeft),
+      ),
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: alignLeft
+          ? [icon, const SizedBox(width: 12), text]
+          : [text, const SizedBox(width: 12), icon],
     );
   }
 }
