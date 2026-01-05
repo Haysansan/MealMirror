@@ -7,9 +7,11 @@ class AppColors {
   // Core brand
   static const Color primary = Color(0xFF5B6E3F); // olive green
   static const Color secondary = Color(0xFF8A9662); // soft olive
+  static const Color matcha = Color(0xFF7B8551);
+  static const Color darkMatcha = Color(0xFF485935);
 
   // Surfaces
-  static const Color background = Color(0xFFF7F0DC); // warm cream
+  static const Color background = Color(0xFFF7EFDA); // warm cream
   static const Color section = Color(0xFFD6E4C3); // light green
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceDark = Color(0xFF2E3A2B);
@@ -21,13 +23,10 @@ class AppColors {
   static const Color textWhiteTheme = onLight;
   static const Color textDarkTheme = onDark;
 
-  // --- Log Meal
-  static const Color logMealBackground = Color(0xFFF7EFDA);
-  static const Color logMealTitle = Color(0x590E1A00);
-  static const Color matcha = Color(0xFF7B8551);
-  static const Color darkMatcha = Color(0xFF485935);
-  static const Color ink = Color(0xFF0E1A00);
-  static const Color inkMuted = Color(0xA50E1A00);
+  // --- Text
+  static const Color mealMirrorTitle = Color(0x590E1A00);
+  static const Color mealMirrorText = Color(0xFF0E1A00);
+  static const Color mealMirrorMutedText = Color(0xA50E1A00);
 
   static const Color actionSurface = Color(0xFFCADBB7);
 
@@ -36,7 +35,6 @@ class AppColors {
   static const Color categoryPillText = Color(0xFF00AF51);
 
   // Portion size card styling
-  static const Color portionCardBaseFill = Color(0xFFCADBB7);
   static const Color portionCardBaseBorder = Color(0xFFE1E7EF);
   static const Color portionCardSelectedBorder = Color(0xFF72B135);
 

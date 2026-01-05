@@ -30,7 +30,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
     final bool canContinue = _selectedCategories.isNotEmpty;
 
     return Scaffold(
-      backgroundColor: AppColors.logMealBackground,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: SizedBox(
@@ -47,7 +47,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                     child: Text(
                       'Log a Meal',
                       style: TextStyle(
-                        color: AppColors.logMealTitle,
+                        color: AppColors.mealMirrorTitle,
                         fontSize: 32,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,

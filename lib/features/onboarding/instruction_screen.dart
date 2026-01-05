@@ -88,7 +88,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.logMealBackground,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
@@ -455,9 +455,7 @@ class _InstructionHero extends StatelessWidget {
                       letterSpacing: 1.4,
                       shadows: [
                         Shadow(
-                          color: AppColors.logMealBackground.withValues(
-                            alpha: 0.25,
-                          ),
+                          color: AppColors.background.withValues(alpha: 0.25),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
