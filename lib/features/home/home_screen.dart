@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
+import '../../shared/widgets/app_scaffold.dart';
+import 'widgets/daily_summary_card.dart';
+import 'widgets/quick_action_row.dart';
 import '../../core/theme/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,85 +9,137 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.primary,
-        title: const Text(
-          'Home',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
+    return AppScaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Center(
+              child: Column(
+                children: [
+                  Text(
+                    'your habits, reflected',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    'mealmirror',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            _petCard(),
+
+            const SizedBox(height: 16),
+
+            const QuickActionRow(),
+
+            const SizedBox(height: 16),
+
+            _dailyBalanceCard(),
+          ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(18),
+    );
+  }
+
+  Widget _petCard() {
+    return Card(
+      color: AppColors.section,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Good morning!',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textWhiteTheme,
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(
+                Icons.autorenew,
+                size: 18,
+                color: AppColors.primary,
               ),
             ),
+
+            Image.asset(
+              'assets/images/MealMirrorPet.png',
+              height: 120,
+            ),
+
             const SizedBox(height: 12),
-            SizedBox(
-              height: 52,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.surface,
-                  foregroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () => context.go('/log-meal'),
-                child: const Text(
-                  'Log Meal',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+
+            const Text(
+              'Ronan, your companion is okay',
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () => context.go('/history'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'History',
-                style: TextStyle(fontFamily: 'Inter'),
-              ),
+            const SizedBox(height: 4),
+            const Text(
+              'Try adding more nutritious meals',
+              style: TextStyle(fontSize: 12),
             ),
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () => context.go('/profile'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Profile',
-                style: TextStyle(fontFamily: 'Inter'),
-              ),
+            const SizedBox(height: 4),
+            const Text(
+              'Evolution Stage: 0/5',
+              style: TextStyle(fontSize: 11),
             ),
           ],
         ),
+      ),
+    );
+  }
 
+  Widget _dailyBalanceCard() {
+    return Card(
+      color: AppColors.section,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Today’s Balance',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Neutral Day',
+              style: TextStyle(fontSize: 12),
+            ),
+            const SizedBox(height: 12),
+
+            _balanceRow('Daily Power (ENERGY)'),
+            _balanceRow('Sweet Level (SUGAR)'),
+            _balanceRow('Fat Fuel (FAT)'),
+            _balanceRow('Grow Power (PROTEIN)'),
+            _balanceRow('Gut Guard (FIBER)'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _balanceRow(String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(label, style: const TextStyle(fontSize: 12)),
+          ),
+          Container(
+            width: 120,
+            height: 8,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+        ],
       ),
     );
   }
