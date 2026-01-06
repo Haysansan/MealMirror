@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
@@ -108,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     todayMeals: todayMeals,
                     todayPoints: todayPoints,
                     todayNutrition: todayNutrition,
-                    onRefresh: _refresh,
                   ),
 
                   const SizedBox(height: 16),
@@ -146,7 +146,6 @@ class _HomeScreenState extends State<HomeScreen> {
     required int todayMeals,
     required int todayPoints,
     required NutritionTotals todayNutrition,
-    required Future<void> Function() onRefresh,
   }) {
     final mood = _petMoodFromTodayScore(
       todayPoints: todayPoints,
@@ -166,11 +165,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: onRefresh,
+                  onTap: () => context.go('/profile'),
                   child: const Padding(
                     padding: EdgeInsets.all(4),
                     child: Icon(
-                      Icons.autorenew,
+                      Icons.person,
                       size: 18,
                       color: AppColors.primary,
                     ),
