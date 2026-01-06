@@ -257,11 +257,17 @@ class MealStore {
   }
 
   static Future<List<MealEntry>> loadMeals(String username) async {
-    final raw = await LocalJsonStore.getString(_userMealsKey(username));
-    if (raw == null || raw.isEmpty) return const [];
+    final stored = await LocalJsonStore.getJson(_userMealsKey(username));
+    if (stored == null) return const [];
 
     try {
-      final decoded = jsonDecode(raw);
+      // New format: store the meals as a JSON list directly.
+      // Legacy format: store the meals as a JSON string.
+      final Object? decoded = switch (stored) {
+        List _ => stored,
+        String s when s.trim().isNotEmpty => jsonDecode(s),
+        _ => null,
+      };
       if (decoded is! List) return const [];
       final entries = <MealEntry>[];
       var needsMigration = false;

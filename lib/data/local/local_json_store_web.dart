@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:html' as html;
+
+import 'package:web/web.dart' as web;
 
 import 'local_json_store_stub.dart';
 
@@ -9,19 +10,26 @@ class LocalJsonStoreBackendImpl implements LocalJsonStoreBackend {
   static const String _storageKey = 'mealmirror_store.txt';
   static const String _legacyStorageKey = 'mealmirror_store';
 
-  void _migrateIfNeeded() {
-    if (html.window.localStorage.containsKey(_storageKey)) return;
+  web.Storage? get _storage => web.window.localStorage;
 
-    final legacy = html.window.localStorage[_legacyStorageKey];
+  void _migrateIfNeeded() {
+    final storage = _storage;
+    if (storage == null) return;
+    if (storage.getItem(_storageKey) != null) return;
+
+    final legacy = storage.getItem(_legacyStorageKey);
     if (legacy == null || legacy.trim().isEmpty) return;
 
-    html.window.localStorage[_storageKey] = legacy;
-    html.window.localStorage.remove(_legacyStorageKey);
+    storage.setItem(_storageKey, legacy);
+    storage.removeItem(_legacyStorageKey);
   }
 
   Map<String, Object?> _readAllSync() {
+    final storage = _storage;
+    if (storage == null) return <String, Object?>{};
+
     _migrateIfNeeded();
-    final raw = html.window.localStorage[_storageKey];
+    final raw = storage.getItem(_storageKey);
     if (raw == null || raw.trim().isEmpty) return <String, Object?>{};
 
     try {
@@ -34,10 +42,13 @@ class LocalJsonStoreBackendImpl implements LocalJsonStoreBackend {
   }
 
   void _writeAllSync(Map<String, Object?> data) {
+    final storage = _storage;
+    if (storage == null) return;
+
     _migrateIfNeeded();
     // Pretty JSON makes DevTools inspection easier.
     const encoder = JsonEncoder.withIndent('  ');
-    html.window.localStorage[_storageKey] = encoder.convert(data);
+    storage.setItem(_storageKey, encoder.convert(data));
   }
 
   @override
@@ -48,6 +59,8 @@ class LocalJsonStoreBackendImpl implements LocalJsonStoreBackend {
 
   @override
   Future<String> debugLocation() async {
-    return 'localStorage:$_storageKey';
+    return _storage == null
+        ? 'localStorage(unavailable):$_storageKey'
+        : 'localStorage:$_storageKey';
   }
 }

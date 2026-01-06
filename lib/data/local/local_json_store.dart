@@ -1,8 +1,9 @@
 import 'local_json_store_stub.dart';
-import 'local_json_store_stub.dart'
-    as impl
+import 'local_json_store_impl_stub.dart'
     if (dart.library.io) 'local_json_store_io.dart'
-    if (dart.library.html) 'local_json_store_web.dart';
+    if (dart.library.html) 'local_json_store_web.dart'
+    if (dart.library.js_interop) 'local_json_store_web.dart'
+    as impl;
 
 /// Single-store API used by the rest of the app.
 ///
