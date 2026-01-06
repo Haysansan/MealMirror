@@ -16,13 +16,32 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  late final Future<List<MealEntry>> _futureMeals;
+  late Future<List<MealEntry>> _futureMeals;
   HistoryRange _range = HistoryRange.daily;
+
+  void _onMealsChanged() {
+    if (!mounted) return;
+    _refresh();
+  }
 
   @override
   void initState() {
     super.initState();
     _futureMeals = MealStore.loadCurrentUserMeals();
+    MealStore.mealsRevision.addListener(_onMealsChanged);
+  }
+
+  @override
+  void dispose() {
+    MealStore.mealsRevision.removeListener(_onMealsChanged);
+    super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _futureMeals = MealStore.loadCurrentUserMeals();
+    });
+    await _futureMeals;
   }
 
   void _setRange(HistoryRange range) {
@@ -110,23 +129,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
               ? "Today's Nutrition"
               : "This Week's Nutrition";
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                HistoryFilterTabs(
-                  selectedRange: _range,
-                  onRangeSelected: _setRange,
-                ),
-                const SizedBox(height: 16),
+          return RefreshIndicator(
+            onRefresh: _refresh,
+            color: AppColors.primary,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  HistoryFilterTabs(
+                    selectedRange: _range,
+                    onRangeSelected: _setRange,
+                  ),
+                  const SizedBox(height: 16),
 
-                HistoryStatCard(title: title, totals: nutritionTotals),
+                  HistoryStatCard(title: title, totals: nutritionTotals),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                MealLogList(meals: filteredMeals, now: now),
-              ],
+                  MealLogList(meals: filteredMeals, now: now),
+                ],
+              ),
             ),
           );
         },

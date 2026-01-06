@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_service.dart';
@@ -37,14 +38,21 @@ class MealEntry {
   /// Scoring system version used to compute [points]/[nutriScore].
   final int scoreVersion;
 
-  MealEntry copyWith({int? points, String? nutriScore, int? scoreVersion}) {
+  MealEntry copyWith({
+    List<String>? categories,
+    String? portion,
+    String? processing,
+    int? points,
+    String? nutriScore,
+    int? scoreVersion,
+  }) {
     return MealEntry(
       id: id,
       date: date,
       createdAt: createdAt,
-      categories: categories,
-      portion: portion,
-      processing: processing,
+      categories: categories ?? this.categories,
+      portion: portion ?? this.portion,
+      processing: processing ?? this.processing,
       points: points ?? this.points,
       nutriScore: nutriScore ?? this.nutriScore,
       scoreVersion: scoreVersion ?? this.scoreVersion,
@@ -123,8 +131,13 @@ class NutritionTotals {
 }
 
 class MealStore {
-  // 5 steps = 100%. Each +1 step -> 20%.
-  static const int maxBarSteps = 5;
+  /// Bumps whenever meals are added/updated for the current user.
+  /// UI can listen to this to auto-refresh cached futures.
+  static final ValueNotifier<int> mealsRevision = ValueNotifier<int>(0);
+
+  // 3 steps = 100%. Each +1 step -> ~33%.
+  // This keeps progress visible even with a single category selection.
+  static const int maxBarSteps = 3;
 
   // Bump this when changing point logic to migrate existing stored meals.
   static const int _scoreSystemVersion = 2;
@@ -136,6 +149,79 @@ class MealStore {
     final m = dt.month.toString().padLeft(2, '0');
     final d = dt.day.toString().padLeft(2, '0');
     return '$y-$m-$d';
+  }
+
+  static String _normalizeCategoryKey(String raw) {
+    final lower = raw.trim().toLowerCase();
+    if (lower.isEmpty) return '';
+
+    // Normalize separators/whitespace and common "and" variants.
+    final normalized = lower
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(RegExp(r'\s*&\s*'), ' & ')
+        .replaceAll(RegExp(r'\s+and\s+'), ' & ')
+        .trim();
+
+    // Map common typos/variants to canonical keys used in the switch logic.
+    return switch (normalized) {
+      'veggies & fruits' => 'veggie & fruits',
+      'vegies & fruits' => 'veggie & fruits',
+      'veggie & fruit' => 'veggie & fruits',
+      'vegetables & fruits' => 'veggie & fruits',
+
+      'grains & starches' => 'grain & starches',
+      'grain & starch' => 'grain & starches',
+      'grains & starch' => 'grain & starches',
+
+      'meats & seafood' => 'meat & seafood',
+      'meat & sea food' => 'meat & seafood',
+      'meat and seafood' => 'meat & seafood',
+
+      'plant proteins' => 'plant protein',
+      'plant-based protein' => 'plant protein',
+      'plant based protein' => 'plant protein',
+
+      'dairy & egg' => 'dairy & eggs',
+      'dairy and eggs' => 'dairy & eggs',
+      'dairy & eggs' => 'dairy & eggs',
+
+      'oils & fat' => 'oils & fats',
+      'oil & fats' => 'oils & fats',
+      'oils and fats' => 'oils & fats',
+
+      // Keep canonical keys as-is.
+      'veggie & fruits' => 'veggie & fruits',
+      'grain & starches' => 'grain & starches',
+      'meat & seafood' => 'meat & seafood',
+      'plant protein' => 'plant protein',
+      'snacks' => 'snacks',
+      'beverages' => 'beverages',
+      _ => normalized,
+    };
+  }
+
+  static String _canonicalCategoryLabel(String raw) {
+    final key = _normalizeCategoryKey(raw);
+    return switch (key) {
+      'veggie & fruits' => 'Veggie & Fruits',
+      'grain & starches' => 'Grain & Starches',
+      'meat & seafood' => 'Meat & Seafood',
+      'plant protein' => 'Plant Protein',
+      'dairy & eggs' => 'Dairy & Eggs',
+      'oils & fats' => 'Oils & Fats',
+      'snacks' => 'Snacks',
+      'beverages' => 'Beverages',
+      _ => raw.trim(),
+    };
+  }
+
+  static bool _sameStringList(List<String> a, List<String> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 
   static DateTime _startOfWeek(DateTime now) {
@@ -168,6 +254,16 @@ class MealStore {
         if (item is Map) {
           final map = item.map((k, v) => MapEntry(k.toString(), v));
           var entry = MealEntry.fromJson(map);
+
+          // Canonicalize categories so nutrition mapping always works.
+          final canonicalCategories = entry.categories
+              .map(_canonicalCategoryLabel)
+              .toList();
+          if (!_sameStringList(entry.categories, canonicalCategories)) {
+            entry = entry.copyWith(categories: canonicalCategories);
+            needsMigration = true;
+          }
+
           if (entry.scoreVersion != _scoreSystemVersion) {
             final estimated = estimateNutriScore(
               categories: entry.categories,
@@ -221,19 +317,24 @@ class MealStore {
     if (username == null || username.isEmpty) return;
 
     final now = DateTime.now();
+    final canonicalCategories = categories
+        .map(_canonicalCategoryLabel)
+        .toList();
+
     final estimated = estimateNutriScore(
-      categories: categories,
+      categories: canonicalCategories,
       processing: processing,
     );
+
     final entry = MealEntry(
       id: now.microsecondsSinceEpoch.toString(),
       date: _dateKey(now),
       createdAt: now,
-      categories: List<String>.from(categories),
+      categories: List<String>.from(canonicalCategories),
       portion: portion,
       processing: processing,
       points: computeMealPoints(
-        categories: categories,
+        categories: canonicalCategories,
         portion: portion,
         processing: processing,
       ),
@@ -249,6 +350,8 @@ class MealStore {
       _userMealsKey(username),
       jsonEncode(meals.map((e) => e.toJson()).toList()),
     );
+
+    mealsRevision.value = mealsRevision.value + 1;
   }
 
   static MealSummary summarizeForToday(List<MealEntry> meals, DateTime now) {
@@ -358,7 +461,7 @@ class MealStore {
     var score = 0;
 
     for (final category in categories) {
-      final key = category.trim().toLowerCase();
+      final key = _normalizeCategoryKey(category);
       switch (key) {
         case 'veggie & fruits':
           score += 2;
@@ -417,7 +520,6 @@ class MealStore {
   // Each category contributes +1 step to its mapped bars.
   // Apply multipliers:
   // - Portion: Small=1, Normal=2, Large=3
-  // - Processing: Whole=+1, Processed=0, Ultra-Processed=-1
   // Steps are later converted to percentages where 5 steps = 100%.
   // NOTE: Snacks/Oils are negative for points, but still grow bars by mapping.
   static NutritionTotals computeMealNutrition({
@@ -432,7 +534,7 @@ class MealStore {
     int fiber = 0;
 
     for (final category in categories) {
-      final key = category.trim().toLowerCase();
+      final key = _normalizeCategoryKey(category);
       switch (key) {
         case 'veggie & fruits':
           fiber += 1;
@@ -475,25 +577,25 @@ class MealStore {
       _ => 1,
     };
 
-    final int processingMultiplier = switch (processing.trim().toLowerCase()) {
-      'whole' => 1,
-      'processed' => 0,
-      'ultra-processed' => -1,
-      'ultra processed' => -1,
-      _ => 0,
-    };
-
     return NutritionTotals(
-      energy: energy * portionMultiplier * processingMultiplier,
-      sugar: sugar * portionMultiplier * processingMultiplier,
-      fat: fat * portionMultiplier * processingMultiplier,
-      protein: protein * portionMultiplier * processingMultiplier,
-      fiber: fiber * portionMultiplier * processingMultiplier,
+      energy: energy * portionMultiplier,
+      sugar: sugar * portionMultiplier,
+      fat: fat * portionMultiplier,
+      protein: protein * portionMultiplier,
+      fiber: fiber * portionMultiplier,
     );
   }
 
   static double barProgressFromSteps(int steps) {
     if (steps <= 0) return 0;
     return (steps / maxBarSteps).clamp(0.0, 1.0);
+  }
+
+  /// Inverted progress (1.0 -> 0.0) for nutrients you want to *limit*.
+  /// Example: sugar/fat can start "full" and go down as more is consumed.
+  static double barRemainingFromSteps(int steps) {
+    if (steps <= 0) return 1.0;
+    final double ratio = (steps / maxBarSteps).clamp(0.0, 1.0);
+    return (1.0 - ratio).clamp(0.0, 1.0);
   }
 }

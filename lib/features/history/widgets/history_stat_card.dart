@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
 import '../../../data/local/meal_store.dart';
+import '../../../shared/widgets/stat_bar.dart';
 
 class HistoryStatCard extends StatelessWidget {
   final String title;
@@ -24,22 +25,27 @@ class HistoryStatCard extends StatelessWidget {
             _nutritionRow(
               'Daily Power (Energy)',
               MealStore.barProgressFromSteps(totals.energy),
+              fillColor: AppColors.grainStarches,
             ),
             _nutritionRow(
               'Sweet Level (Sugar)',
               MealStore.barProgressFromSteps(totals.sugar),
+              fillColor: AppColors.snacks,
             ),
             _nutritionRow(
               'Fat Fuel (Fat)',
               MealStore.barProgressFromSteps(totals.fat),
+              fillColor: AppColors.oilsFats,
             ),
             _nutritionRow(
               'Grow Power (Protein)',
               MealStore.barProgressFromSteps(totals.protein),
+              fillColor: AppColors.meatSeafood,
             ),
             _nutritionRow(
               'Gut Guard (Fiber)',
               MealStore.barProgressFromSteps(totals.fiber),
+              fillColor: AppColors.veggieFruits,
             ),
           ],
         ),
@@ -47,42 +53,18 @@ class HistoryStatCard extends StatelessWidget {
     );
   }
 
-  Widget _nutritionRow(String label, double progress) {
+  Widget _nutritionRow(
+    String label,
+    double progress, {
+    required Color fillColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           Expanded(child: Text(label, style: const TextStyle(fontSize: 13))),
-          _ProgressBar(progress: progress),
+          StatBar(progress: progress, fillColor: fillColor, height: 10),
         ],
-      ),
-    );
-  }
-}
-
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({required this.progress});
-
-  final double progress;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 8,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(color: Colors.white.withValues(alpha: 0.6)),
-            ),
-            FractionallySizedBox(
-              widthFactor: progress,
-              child: Container(color: AppColors.actionSurface),
-            ),
-          ],
-        ),
       ),
     );
   }

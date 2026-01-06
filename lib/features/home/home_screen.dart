@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
 import '../../shared/widgets/app_scaffold.dart';
+import '../../shared/widgets/stat_bar.dart';
 import 'widgets/quick_action_row.dart';
 import '../../core/theme/app_colors.dart';
 
@@ -14,12 +15,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final Future<_HomeViewModel> _future;
+  late Future<_HomeViewModel> _future;
+
+  void _onMealsChanged() {
+    // Auto-refresh when a meal is added/updated.
+    if (!mounted) return;
+    _refresh();
+  }
 
   @override
   void initState() {
     super.initState();
     _future = _load();
+    MealStore.mealsRevision.addListener(_onMealsChanged);
+  }
+
+  @override
+  void dispose() {
+    MealStore.mealsRevision.removeListener(_onMealsChanged);
+    super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _future = _load();
+    });
+    await _future;
   }
 
   Future<_HomeViewModel> _load() async {
@@ -53,49 +74,55 @@ class _HomeScreenState extends State<HomeScreen> {
           final todayNutrition =
               model?.todayNutrition ?? const NutritionTotals.zero();
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        'your habits, reflected',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Text(
-                        'mealmirror',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+          return RefreshIndicator(
+            onRefresh: _refresh,
+            color: AppColors.primary,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'your habits, reflected',
+                          style: TextStyle(fontSize: 12),
                         ),
-                      ),
-                    ],
+                        Text(
+                          'mealmirror',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                _petCard(
-                  nickname: nickname,
-                  todayMeals: todayMeals,
-                  todayPoints: todayPoints,
-                  todayNutrition: todayNutrition,
-                ),
+                  _petCard(
+                    nickname: nickname,
+                    todayMeals: todayMeals,
+                    todayPoints: todayPoints,
+                    todayNutrition: todayNutrition,
+                    onRefresh: _refresh,
+                  ),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                QuickActionRow(
-                  todayValue: _formatSigned(todayPoints),
-                  weekAvgValue: _formatSigned(weekAvg),
-                ),
+                  QuickActionRow(
+                    todayValue: _formatSigned(todayPoints),
+                    weekAvgValue: _formatSigned(weekAvg),
+                  ),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                _dailyBalanceCard(totals: todayNutrition),
-              ],
+                  _dailyBalanceCard(totals: todayNutrition),
+                ],
+              ),
             ),
           );
         },
@@ -119,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required int todayMeals,
     required int todayPoints,
     required NutritionTotals todayNutrition,
+    required Future<void> Function() onRefresh,
   }) {
     final mood = _petMoodFromTodayScore(
       todayPoints: todayPoints,
@@ -134,7 +162,21 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: Icon(Icons.autorenew, size: 18, color: AppColors.primary),
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: onRefresh,
+                  child: const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Icon(
+                      Icons.autorenew,
+                      size: 18,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
             ),
 
             Image.asset('assets/images/MealMirrorPet.png', height: 120),
@@ -233,22 +275,27 @@ class _HomeScreenState extends State<HomeScreen> {
             _balanceRow(
               'Daily Power (ENERGY)',
               MealStore.barProgressFromSteps(totals.energy),
+              fillColor: AppColors.grainStarches,
             ),
             _balanceRow(
               'Sweet Level (SUGAR)',
               MealStore.barProgressFromSteps(totals.sugar),
+              fillColor: AppColors.snacks,
             ),
             _balanceRow(
               'Fat Fuel (FAT)',
               MealStore.barProgressFromSteps(totals.fat),
+              fillColor: AppColors.oilsFats,
             ),
             _balanceRow(
               'Grow Power (PROTEIN)',
               MealStore.barProgressFromSteps(totals.protein),
+              fillColor: AppColors.meatSeafood,
             ),
             _balanceRow(
               'Gut Guard (FIBER)',
               MealStore.barProgressFromSteps(totals.fiber),
+              fillColor: AppColors.veggieFruits,
             ),
           ],
         ),
@@ -256,42 +303,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _balanceRow(String label, double progress) {
+  Widget _balanceRow(
+    String label,
+    double progress, {
+    required Color fillColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           Expanded(child: Text(label, style: const TextStyle(fontSize: 12))),
-          _ProgressBar(progress: progress),
+          StatBar(progress: progress, fillColor: fillColor),
         ],
-      ),
-    );
-  }
-}
-
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({required this.progress});
-
-  final double progress;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 8,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(color: Colors.white.withValues(alpha: 0.6)),
-            ),
-            FractionallySizedBox(
-              widthFactor: progress,
-              child: Container(color: AppColors.actionSurface),
-            ),
-          ],
-        ),
       ),
     );
   }
