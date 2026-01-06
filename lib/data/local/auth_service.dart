@@ -47,8 +47,6 @@ class AuthService {
     final prefs = await _prefs();
 
     // This app uses a lightweight local profile (no passwords).
-    // If the user already exists, treat this as selecting that profile and
-    // updating the nickname.
     await prefs.setString(_storedUserKey(username), nickname);
     await _setCurrentUser(prefs: prefs, username: username, nickname: nickname);
 
@@ -83,33 +81,33 @@ class AuthService {
   }
 
   // Update nickname
-  static Future<bool> updateNickname(String newNickname) async {
-    if (newNickname.isEmpty) {
-      return false;
-    }
+  // static Future<bool> updateNickname(String newNickname) async {
+  //   if (newNickname.isEmpty) {
+  //     return false;
+  //   }
 
-    final prefs = await _prefs();
-    final username = await getCurrentUsername();
+  //   final prefs = await _prefs();
+  //   final username = await getCurrentUsername();
 
-    if (username == null) {
-      return false;
-    }
+  //   if (username == null) {
+  //     return false;
+  //   }
 
-    await prefs.setString(_storedUserKey(username), newNickname);
-    await prefs.setString(_keyNickname, newNickname);
+  //   await prefs.setString(_storedUserKey(username), newNickname);
+  //   await prefs.setString(_keyNickname, newNickname);
 
-    return true;
-  }
+  //   return true;
+  // }
 
   // Delete account
-  static Future<void> deleteAccount() async {
-    final prefs = await _prefs();
-    final username = await getCurrentUsername();
+  // static Future<void> deleteAccount() async {
+  //   final prefs = await _prefs();
+  //   final username = await getCurrentUsername();
 
-    if (username != null) {
-      await prefs.remove(_storedUserKey(username));
-    }
+  //   if (username != null) {
+  //     await prefs.remove(_storedUserKey(username));
+  //   }
 
-    await logout();
-  }
+  //   await logout();
+  // }
 }

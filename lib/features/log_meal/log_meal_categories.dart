@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 
-/// Canonical categories used throughout the Log Meal flow.
+/// categories used throughout the Log Meal flow.
 ///
 /// IMPORTANT:
-/// - [key] is the value stored/passed through the flow.
-/// - Do not change these keys without a data migration.
+/// - [key] is the value stored/passed through the flow
 class LogMealCategoryInfo {
   const LogMealCategoryInfo({
     required this.key,

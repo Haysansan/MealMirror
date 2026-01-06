@@ -104,7 +104,7 @@ class _MealInputCardState extends State<MealInputCard> {
                     ? constraints.maxWidth
                     : constraints.maxHeight;
 
-                // For compact cards, make icons more visible.
+                // make icons more visible.
                 final double iconScale = widget.showTitle ? 0.42 : 0.62;
                 final double iconSize = (shortestSide * iconScale).clamp(
                   18.0,

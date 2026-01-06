@@ -18,8 +18,6 @@ class AppColors {
 
   // Status
   static const Color error = Color(0xFFB00020);
-
-  // Backwards-compatible aliases (keep these so other files don't break)
   static const Color textWhiteTheme = onLight;
   static const Color textDarkTheme = onDark;
 

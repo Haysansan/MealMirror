@@ -43,7 +43,6 @@ class StatBar extends StatelessWidget {
       (height * 2) + 10,
     );
     final double dotTop = (height - dotSize) / 2;
-    // Default to the fill color so the bar looks continuous from 0 to the end.
     final Color dotColor = endpointColor ?? fillColor;
     final double dotLeft = (width * clamped) - (dotSize / 2);
 

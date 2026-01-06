@@ -486,10 +486,10 @@ class MealStore {
           score += 0;
           break;
         case 'dairy & eggs':
-          score += 0;
+          score += 1;
           break;
         case 'oils & fats':
-          score -= 1;
+          score -= 2;
           break;
         case 'snacks':
           score -= 2;
@@ -505,8 +505,7 @@ class MealStore {
     score += switch (processing.trim().toLowerCase()) {
       'whole' => 1,
       'processed' => 0,
-      'ultra-processed' => -1,
-      'ultra processed' => -1,
+      'ultra-processed' => -2,
       _ => 0,
     };
 
@@ -601,8 +600,8 @@ class MealStore {
     return (steps / maxBarSteps).clamp(0.0, 1.0);
   }
 
-  /// Inverted progress (1.0 -> 0.0) for nutrients you want to *limit*.
-  /// Example: sugar/fat can start "full" and go down as more is consumed.
+  /// Inverted progress
+  /// Example: sugar/fat can start full and go down
   static double barRemainingFromSteps(int steps) {
     if (steps <= 0) return 1.0;
     final double ratio = (steps / maxBarSteps).clamp(0.0, 1.0);

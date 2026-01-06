@@ -23,7 +23,6 @@ class AppTheme {
       foregroundColor: AppColors.textWhiteTheme,
     ),
 
-    // <-- use centralized styles
     textTheme: ThemeData.light().textTheme,
 
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -32,26 +31,26 @@ class AppTheme {
     ),
   );
 
-  static final ThemeData darkTheme = ThemeData(
-    fontFamily: 'Inter',
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.primary,
-      secondary: AppColors.secondary,
-      surface: AppColors.surfaceDark,
-      error: AppColors.error,
-      onPrimary: AppColors.textDarkTheme,
-      onSecondary: AppColors.textDarkTheme,
-      onSurface: AppColors.textDarkTheme,
-      onError: AppColors.textDarkTheme,
-    ),
-    scaffoldBackgroundColor: AppColors.surfaceDark,
-    cardColor: AppColors.surfaceDark,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.surfaceDark,
-      foregroundColor: AppColors.textWhiteTheme,
-    ),
+  // static final ThemeData darkTheme = ThemeData(
+  //   fontFamily: 'Inter',
+  //   colorScheme: const ColorScheme.dark(
+  //     primary: AppColors.primary,
+  //     secondary: AppColors.secondary,
+  //     surface: AppColors.surfaceDark,
+  //     error: AppColors.error,
+  //     onPrimary: AppColors.textDarkTheme,
+  //     onSecondary: AppColors.textDarkTheme,
+  //     onSurface: AppColors.textDarkTheme,
+  //     onError: AppColors.textDarkTheme,
+  //   ),
+  //   scaffoldBackgroundColor: AppColors.surfaceDark,
+  //   cardColor: AppColors.surfaceDark,
+  //   appBarTheme: const AppBarTheme(
+  //     backgroundColor: AppColors.surfaceDark,
+  //     foregroundColor: AppColors.textWhiteTheme,
+  //   ),
 
-    // dark theme reuse (adjust if you want different sizes/colors)
-    textTheme: ThemeData.dark().textTheme,
-  );
+  //   // dark theme reuse (adjust if you want different sizes/colors)
+  //   textTheme: ThemeData.dark().textTheme,
+  // ); DarkTheme For Future Works
 }

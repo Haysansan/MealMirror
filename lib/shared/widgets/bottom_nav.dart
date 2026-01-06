@@ -38,12 +38,11 @@ class BottomNav extends StatelessWidget {
               final double centerLeft =
                   (constraints.maxWidth - centerWidth) / 2;
 
-              // Match the feel of the Figma layout: the highlight sits slightly
               // above the white bar.
               const double baseTop = 42;
               const double highlightTop = 32;
 
-              // Align highlights to the centers of the left/right tap zones.
+              // Align highlights to the centers
               const double sidePadding = 18;
               final double sideZoneWidth =
                   (constraints.maxWidth - (sidePadding * 2) - centerWidth) / 2;
@@ -74,7 +73,7 @@ class BottomNav extends StatelessWidget {
                     ),
                   ),
 
-                  // Side highlight for Home/History selection
+                  // Side highlight
                   if (index == 0)
                     Positioned(
                       left: leftHighlightLeft,
@@ -108,7 +107,7 @@ class BottomNav extends StatelessWidget {
                       ),
                     ),
 
-                  // Center raised panel (background)
+                  // Center raised panel
                   Positioned(
                     left: centerLeft,
                     top: 0,

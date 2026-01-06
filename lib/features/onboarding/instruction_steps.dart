@@ -117,7 +117,7 @@ const List<InstructionStep> instructionSteps = [
       ConversationBlock.text(
         side: ConversationSide.right,
         text:
-            'instead of nutrients in grams, the app uses 5 abstract daily dimensions.',
+            'instead of nutrients in grams, the app uses 5 abstract daily dimensions and 5C Nutri-Scores.',
       ),
       ConversationBlock.rich(
         side: ConversationSide.left,
