@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import 'log_meal_flow_args.dart';
+import 'log_meal_categories.dart';
 import 'widgets/meal_input_card.dart';
 
 class LogMealScreen extends StatefulWidget {
@@ -73,90 +75,17 @@ class _LogMealScreenState extends State<LogMealScreen> {
                           spacing: 27,
                           runSpacing: 18,
                           children: [
-                            MealInputCard(
-                              title: 'Veggie & Fruits',
-                              icon: Image.asset('assets/images/Vegies.png'),
-                              color: AppColors.veggieFruits,
-                              selected: _selectedCategories.contains(
-                                'Veggie & Fruits',
+                            for (final category in LogMealCategories.all)
+                              MealInputCard(
+                                title: category.displayName,
+                                icon: Image.asset(category.iconAssetPath),
+                                color: category.color,
+                                selected: _selectedCategories.contains(
+                                  category.key,
+                                ),
+                                onSelectedChanged: (value) =>
+                                    _setCategorySelected(category.key, value),
                               ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected(
-                                    'Veggie & Fruits',
-                                    value,
-                                  ),
-                            ),
-                            MealInputCard(
-                              title: 'Grain & Starches',
-                              icon: Image.asset('assets/images/Bread.png'),
-                              color: AppColors.grainStarches,
-                              selected: _selectedCategories.contains(
-                                'Grain & Starches',
-                              ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected(
-                                    'Grain & Starches',
-                                    value,
-                                  ),
-                            ),
-                            MealInputCard(
-                              title: 'Meat & Seafood',
-                              icon: Image.asset('assets/images/meat.png'),
-                              color: AppColors.meatSeafood,
-                              selected: _selectedCategories.contains(
-                                'Meat & Seafood',
-                              ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected('Meat & Seafood', value),
-                            ),
-                            MealInputCard(
-                              title: 'Plant Protein',
-                              icon: Image.asset('assets/images/Tomato.png'),
-                              color: AppColors.plantProtein,
-                              selected: _selectedCategories.contains(
-                                'Plant Protein',
-                              ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected('Plant Protein', value),
-                            ),
-                            MealInputCard(
-                              title: 'Dairy & Eggs',
-                              icon: Image.asset('assets/images/Egg.png'),
-                              color: AppColors.dairyEggs,
-                              selected: _selectedCategories.contains(
-                                'Dairy & Eggs',
-                              ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected('Dairy & Eggs', value),
-                            ),
-                            MealInputCard(
-                              title: 'Oils & Fats',
-                              icon: Image.asset('assets/images/cheese.png'),
-                              color: AppColors.oilsFats,
-                              selected: _selectedCategories.contains(
-                                'Oils & Fats',
-                              ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected('Oils & Fats', value),
-                            ),
-                            MealInputCard(
-                              title: 'Snacks',
-                              icon: Image.asset('assets/images/cookie.png'),
-                              color: AppColors.snacks,
-                              selected: _selectedCategories.contains('Snacks'),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected('Snacks', value),
-                            ),
-                            MealInputCard(
-                              title: 'Beverages',
-                              icon: Image.asset('assets/images/beverages.png'),
-                              color: AppColors.beverages,
-                              selected: _selectedCategories.contains(
-                                'Beverages',
-                              ),
-                              onSelectedChanged: (value) =>
-                                  _setCategorySelected('Beverages', value),
-                            ),
                           ],
                         ),
                         const SizedBox(height: 28),
@@ -173,7 +102,7 @@ class _LogMealScreenState extends State<LogMealScreen> {
                                 onTap: canContinue
                                     ? () {
                                         context.push(
-                                          '/portion-size',
+                                          AppRoutes.portionSize,
                                           extra: PortionSizeArgs(
                                             selectedCategories:
                                                 _selectedCategories.toList(),

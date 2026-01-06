@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../core/navigation/app_routes.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/profile_stat_row.dart';
 import '../../core/theme/app_colors.dart';
@@ -82,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
     if (confirm == true && context.mounted) {
       await AuthService.logout();
       if (context.mounted) {
-        context.go('/signup');
+        context.go(AppRoutes.signup);
       }
     }
   }
@@ -104,7 +106,7 @@ class ProfileScreen extends StatelessWidget {
       centerTitle: false,
       trailing: IconButton(
         icon: const Icon(Icons.close, color: AppColors.darkMatcha),
-        onPressed: () => context.go('/home'),
+        onPressed: () => context.go(AppRoutes.home),
       ),
       body: FutureBuilder<List<MealEntry>>(
         future: mealsFuture,

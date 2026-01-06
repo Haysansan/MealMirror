@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 
 class PetAvatar extends StatelessWidget {
+  const PetAvatar({super.key, this.size = 96});
+
   final double size;
-  const PetAvatar({Key? key, this.size = 96}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: size / 2,
-      backgroundColor: AppColors.surface,
-      child: Icon(Icons.pets, size: size * 0.5, color: AppColors.primary),
-    );
+    // Currently unused; keep as a harmless placeholder.
+    return SizedBox.square(dimension: size);
   }
 }

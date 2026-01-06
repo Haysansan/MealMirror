@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 
 class BottomNav extends StatelessWidget {
@@ -8,10 +9,10 @@ class BottomNav extends StatelessWidget {
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
-    if (location.startsWith('/history')) return 2;
-    if (location.startsWith('/log-meal') ||
-        location.startsWith('/portion-size') ||
-        location.startsWith('/processing-level')) {
+    if (location.startsWith(AppRoutes.history)) return 2;
+    if (location.startsWith(AppRoutes.logMeal) ||
+        location.startsWith(AppRoutes.portionSize) ||
+        location.startsWith(AppRoutes.processingLevel)) {
       return 1;
     }
     return 0;
@@ -143,7 +144,7 @@ class BottomNav extends StatelessWidget {
                           topLeft: Radius.circular(topRadius),
                           topRight: Radius.circular(topRadius),
                         ),
-                        onTap: () => context.go('/log-meal'),
+                        onTap: () => context.go(AppRoutes.logMeal),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -186,7 +187,7 @@ class BottomNav extends StatelessWidget {
                               label: 'Home',
                               icon: Icons.eco,
                               selected: index == 0,
-                              onTap: () => context.go('/home'),
+                              onTap: () => context.go(AppRoutes.home),
                             ),
                           ),
                           const SizedBox(width: centerWidth),
@@ -195,7 +196,7 @@ class BottomNav extends StatelessWidget {
                               label: 'History',
                               icon: Icons.history,
                               selected: index == 2,
-                              onTap: () => context.go('/history'),
+                              onTap: () => context.go(AppRoutes.history),
                             ),
                           ),
                         ],

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import 'app_routes.dart';
 import '../../features/auth/signup_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/log_meal/log_meal_flow_args.dart';
@@ -13,32 +14,35 @@ import '../../features/history/history_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
-    initialLocation: '/welcome',
+    initialLocation: AppRoutes.welcome,
     routes: [
       GoRoute(
-        path: '/signup',
+        path: AppRoutes.signup,
         builder: (context, state) => const SignUpScreen(),
       ),
 
       GoRoute(
-        path: '/welcome',
+        path: AppRoutes.welcome,
         builder: (context, state) => const WelcomeScreen(),
       ),
 
       GoRoute(
-        path: '/instruction',
+        path: AppRoutes.instruction,
         builder: (context, state) => const InstructionScreen(),
       ),
 
-      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (context, state) => const HomeScreen(),
+      ),
 
       GoRoute(
-        path: '/log-meal',
+        path: AppRoutes.logMeal,
         builder: (context, state) => const LogMealScreen(),
       ),
 
       GoRoute(
-        path: '/portion-size',
+        path: AppRoutes.portionSize,
         builder: (context, state) {
           final extra = state.extra;
           if (extra is PortionSizeArgs) {
@@ -51,7 +55,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/processing-level',
+        path: AppRoutes.processingLevel,
         builder: (context, state) {
           final extra = state.extra;
           if (extra is ProcessingLevelArgs) {
@@ -65,12 +69,12 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/history',
+        path: AppRoutes.history,
         builder: (context, state) => const HistoryScreen(),
       ),
 
       GoRoute(
-        path: '/profile',
+        path: AppRoutes.profile,
         builder: (context, state) => const ProfileScreen(),
       ),
     ],

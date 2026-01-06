@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/local/auth_service.dart';
 
@@ -44,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!mounted) return;
 
     if (success) {
-      context.go('/home');
+      context.go(AppRoutes.home);
     } else {
       setState(() {
         _isLoading = false;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/app_routes.dart';
 import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
 import '../../shared/widgets/app_scaffold.dart';
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: () => context.go('/profile'),
+                  onTap: () => context.go(AppRoutes.profile),
                   child: const Padding(
                     padding: EdgeInsets.all(4),
                     child: Icon(

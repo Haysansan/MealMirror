@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/local/preferences/app_preferences.dart';
 import 'instruction_steps.dart';
@@ -37,7 +38,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
   Future<void> _finishOnboarding(BuildContext context) async {
     await AppPreferences.setBool('seenOnboarding', true);
     if (context.mounted) {
-      context.go('/signup');
+      context.go(AppRoutes.signup);
     }
   }
 

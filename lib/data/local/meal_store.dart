@@ -234,6 +234,22 @@ class MealStore {
     ).subtract(Duration(days: delta));
   }
 
+  static DateTime _endOfTodayExclusive(DateTime now) {
+    return DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+  }
+
+  static Iterable<MealEntry> _mealsInRange(
+    List<MealEntry> meals, {
+    required DateTime startInclusive,
+    required DateTime endExclusive,
+  }) {
+    return meals.where(
+      (m) =>
+          !m.createdAt.isBefore(startInclusive) &&
+          m.createdAt.isBefore(endExclusive),
+    );
+  }
+
   static Future<List<MealEntry>> loadCurrentUserMeals() async {
     final username = await AuthService.getCurrentUsername();
     if (username == null || username.isEmpty) return const [];
@@ -363,15 +379,12 @@ class MealStore {
 
   static MealSummary summarizeForThisWeek(List<MealEntry> meals, DateTime now) {
     final start = _startOfWeek(now);
-    final endExclusive = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).add(const Duration(days: 1));
 
-    final weekMeals = meals.where((m) {
-      return !m.createdAt.isBefore(start) && m.createdAt.isBefore(endExclusive);
-    }).toList();
+    final weekMeals = _mealsInRange(
+      meals,
+      startInclusive: start,
+      endExclusive: _endOfTodayExclusive(now),
+    ).toList();
 
     final total = weekMeals.fold<int>(0, (sum, m) => sum + m.points);
     return MealSummary(mealCount: weekMeals.length, totalPoints: total);
@@ -399,14 +412,11 @@ class MealStore {
     DateTime now,
   ) {
     final start = _startOfWeek(now);
-    final endExclusive = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).add(const Duration(days: 1));
 
-    final weekMeals = meals.where(
-      (m) => !m.createdAt.isBefore(start) && m.createdAt.isBefore(endExclusive),
+    final weekMeals = _mealsInRange(
+      meals,
+      startInclusive: start,
+      endExclusive: _endOfTodayExclusive(now),
     );
 
     var totals = const NutritionTotals.zero();

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class WelcomeScreen extends StatelessWidget {
 
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => context.push('/instruction'),
+                  onTap: () => context.push(AppRoutes.instruction),
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Column(

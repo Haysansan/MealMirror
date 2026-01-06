@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/local/meal_store.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import 'widgets/nutrition_selector.dart';
 import 'widgets/meal_input_card.dart';
 import 'widgets/selection_pill.dart';
+import 'log_meal_categories.dart';
 
 class ProcessingLevelScreen extends StatefulWidget {
   const ProcessingLevelScreen({
@@ -27,98 +29,28 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
   bool _isSaving = false;
 
   MealInputCard _categoryCard(String category) {
-    switch (category) {
-      case 'Veggie & Fruits':
-        return MealInputCard(
-          title: 'Veggies',
-          icon: Image.asset('assets/images/Vegies.png'),
-          color: AppColors.veggieFruits,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Grain & Starches':
-        return MealInputCard(
-          title: 'Grains',
-          icon: Image.asset('assets/images/Bread.png'),
-          color: AppColors.grainStarches,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Meat & Seafood':
-        return MealInputCard(
-          title: 'Meat',
-          icon: Image.asset('assets/images/meat.png'),
-          color: AppColors.meatSeafood,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Plant Protein':
-        return MealInputCard(
-          title: 'Plant',
-          icon: Image.asset('assets/images/Tomato.png'),
-          color: AppColors.plantProtein,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Dairy & Eggs':
-        return MealInputCard(
-          title: 'Dairy',
-          icon: Image.asset('assets/images/Egg.png'),
-          color: AppColors.dairyEggs,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Oils & Fats':
-        return MealInputCard(
-          title: 'Oils',
-          icon: Image.asset('assets/images/cheese.png'),
-          color: AppColors.oilsFats,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Snacks':
-        return MealInputCard(
-          title: 'Snacks',
-          icon: Image.asset('assets/images/cookie.png'),
-          color: AppColors.snacks,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      case 'Beverages':
-        return MealInputCard(
-          title: 'Drinks',
-          icon: Image.asset('assets/images/beverages.png'),
-          color: AppColors.beverages,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
-      default:
-        return MealInputCard(
-          title: category,
-          icon: const Icon(Icons.fastfood, color: AppColors.darkMatcha),
-          color: AppColors.categoryPillFill,
-          width: 74,
-          height: 72,
-          showTitle: true,
-          selected: true,
-        );
+    final info = LogMealCategories.tryGet(category);
+    if (info == null) {
+      return MealInputCard(
+        title: category,
+        icon: const Icon(Icons.fastfood, color: AppColors.darkMatcha),
+        color: AppColors.categoryPillFill,
+        width: 74,
+        height: 72,
+        showTitle: true,
+        selected: true,
+      );
     }
+
+    return MealInputCard(
+      title: info.shortName,
+      icon: Image.asset(info.iconAssetPath),
+      color: info.color,
+      width: 74,
+      height: 72,
+      showTitle: true,
+      selected: true,
+    );
   }
 
   void _toggleProcessing(String value) {
@@ -142,7 +74,7 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
     );
 
     if (!mounted) return;
-    context.go('/home');
+    context.go(AppRoutes.home);
   }
 
   @override
