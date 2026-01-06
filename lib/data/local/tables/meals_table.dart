@@ -1,4 +1,3 @@
-// TODO: implement meals table (Drift)
 import 'package:drift/drift.dart';
 
 class Meals extends Table {
