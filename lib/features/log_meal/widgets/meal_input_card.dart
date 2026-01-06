@@ -9,6 +9,7 @@ class MealInputCard extends StatefulWidget {
     this.color = AppColors.veggieFruits,
     this.width = 161,
     this.height = 100.45,
+    this.showTitle = true,
     this.selected,
     this.initiallySelected = false,
     this.onSelectedChanged,
@@ -20,6 +21,7 @@ class MealInputCard extends StatefulWidget {
   final Color color;
   final double width;
   final double height;
+  final bool showTitle;
   final bool? selected;
 
   /// Used only when [selected] is null.
@@ -91,38 +93,63 @@ class _MealInputCardState extends State<MealInputCard> {
                 ),
               ],
             ),
-            padding: const EdgeInsets.only(
-              top: 15,
-              left: 10,
-              right: 10,
-              bottom: 5,
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.showTitle ? 10 : 8,
+              vertical: widget.showTitle ? 12 : 8,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 26.64,
-                  height: 23.69,
-                  child: FittedBox(fit: BoxFit.contain, child: widget.icon),
-                ),
-                const SizedBox(height: 15),
-                SizedBox(
-                  width: 113,
-                  height: 27,
-                  child: Text(
-                    widget.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppColors.darkMatcha /* Dark-Matcha */,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w400,
-                      height: 2,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final double shortestSide =
+                    (constraints.maxWidth < constraints.maxHeight)
+                    ? constraints.maxWidth
+                    : constraints.maxHeight;
+
+                // For compact cards, make icons more visible.
+                final double iconScale = widget.showTitle ? 0.42 : 0.62;
+                final double iconSize = (shortestSide * iconScale).clamp(
+                  18.0,
+                  widget.showTitle ? 36.0 : 32.0,
+                );
+
+                if (!widget.showTitle) {
+                  return Center(
+                    child: SizedBox(
+                      width: iconSize,
+                      height: iconSize,
+                      child: FittedBox(fit: BoxFit.contain, child: widget.icon),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                }
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: iconSize,
+                      height: iconSize,
+                      child: FittedBox(fit: BoxFit.contain, child: widget.icon),
+                    ),
+                    SizedBox(
+                      height: (constraints.maxHeight * 0.12).clamp(6, 14),
+                    ),
+                    Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AppColors.darkMatcha,
+                        fontSize: 13,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        height: 1.2,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
