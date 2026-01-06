@@ -20,10 +20,15 @@ MealMirror is a Flutter app for tracking meals and basic nutrition over time, wi
 
 ## Project Structure
 
-High-level layout under `lib/`:
+Key files/folders:
 
 ```text
+README.md
+pubspec.yaml
+analysis_options.yaml
+
 lib/
+  main.dart
   core/
     navigation/
       app_router.dart
@@ -35,11 +40,11 @@ lib/
   data/
     local/
       auth_service.dart
-      meal_store.dart
       local_json_store.dart
       local_json_store_stub.dart
       local_json_store_io.dart
       local_json_store_web.dart
+      meal_store.dart
       preferences/
         app_preferences.dart
   features/
@@ -81,7 +86,10 @@ lib/
       bottom_nav.dart
       primary_button.dart
       stat_bar.dart
-  main.dart
+
+test/
+  meal_store_test.dart
+  widget_test.dart
 ```
 
 ## Getting Started
@@ -93,13 +101,6 @@ lib/
   - **Web**: Chrome
   - **Windows**: Visual Studio (Desktop development with C++)
   - **iOS**: Xcode (macOS only)
-
-Helpful sanity checks:
-
-```bash
-flutter doctor
-flutter devices
-```
 
 ### Install Dependencies
 
@@ -123,18 +124,10 @@ flutter run -d windows
 flutter run -d ios
 ```
 
-### Verify Local Storage (Web)
+Hot reload while running:
 
-On Chrome, the store is saved in browser storage (not as a disk file):
-
-- DevTools → Application → Local Storage → your origin
-- Key: `mealmirror_store.txt`
-
-Console shortcut:
-
-```js
-localStorage.getItem('mealmirror_store.txt')
-```
+- Press `r` in the run terminal
+- Press `R` for a full restart
 
 ## Local Data
 
@@ -144,20 +137,23 @@ All local data is stored in a single store named `mealmirror_store.txt`.
 - **Windows/iOS/macOS/Linux**: stored as a real file named `mealmirror_store.txt` in the app documents directory
   - The app prints the exact location at startup in debug mode: `MealMirror local storage: ...`
 
+To inspect storage on **Web** quickly:
+
+- Chrome DevTools → **Application** → **Local Storage** → your origin → `mealmirror_store.txt`
+- Or run in Console: `localStorage.getItem('mealmirror_store.txt')`
+
 ## Development
-
-Common workflows:
-
-### Format
-
-```bash
-dart format .
-```
 
 ### Analyze
 
 ```bash
 flutter analyze
+```
+
+### Format
+
+```bash
+dart format .
 ```
 
 ### Test
