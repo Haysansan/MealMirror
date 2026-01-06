@@ -34,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
     if (confirm == true && context.mounted) {
       await AuthService.logout();
       if (context.mounted) {
-        context.go('/login');
+        context.go('/signup');
       }
     }
   }

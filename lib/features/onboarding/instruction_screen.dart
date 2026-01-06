@@ -37,7 +37,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
   Future<void> _finishOnboarding(BuildContext context) async {
     await AppPreferences.setBool('seenOnboarding', true);
     if (context.mounted) {
-      context.go('/login');
+      context.go('/signup');
     }
   }
 

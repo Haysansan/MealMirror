@@ -48,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else {
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Username already exists. Please choose another.';
+        _errorMessage = 'Could not save your profile. Please try again.';
       });
     }
   }
@@ -86,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 24),
 
               const Text(
-                'Sign up',
+                'Create profile',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -109,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'UserName',
+                        'Name',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       TextField(
                         controller: _usernameController,
                         decoration: InputDecoration(
-                          hintText: 'UserName',
+                          hintText: 'Your name',
                           hintStyle: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 14,
@@ -204,7 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 )
                               : const Text(
-                                  'Sign in',
+                                  'Continue',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -215,29 +215,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ],
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Login link
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Already have an account? ",
-                    style: TextStyle(color: Color(0xFF2D3E2F)),
-                  ),
-                  GestureDetector(
-                    onTap: () => context.go('/login'),
-                    child: Text(
-                      'Log in',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

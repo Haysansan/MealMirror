@@ -32,16 +32,12 @@ class AuthService {
 
     final prefs = await SharedPreferences.getInstance();
 
-    // Check if username already exists
-    final existingUser = prefs.getString('$_keyUsersPrefix$username');
-    if (existingUser != null) {
-      return false; // Username already taken
-    }
-
-    // Store user data
+    // This app uses a lightweight local profile (no passwords).
+    // If the user already exists, treat this as selecting that profile and
+    // updating the nickname.
     await prefs.setString('$_keyUsersPrefix$username', nickname);
 
-    // Auto login after signup
+    // Set current user
     await prefs.setBool(_keyIsLoggedIn, true);
     await prefs.setString(_keyUsername, username);
     await prefs.setString(_keyNickname, nickname);
