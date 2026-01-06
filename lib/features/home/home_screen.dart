@@ -78,7 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 16),
 
-                _petCard(nickname: nickname, todayMeals: todayMeals),
+                _petCard(
+                  nickname: nickname,
+                  todayMeals: todayMeals,
+                  todayPoints: todayPoints,
+                  todayNutrition: todayNutrition,
+                ),
 
                 const SizedBox(height: 16),
 
@@ -109,7 +114,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return value > 0 ? '+$value' : value.toString();
   }
 
-  Widget _petCard({required String nickname, required int todayMeals}) {
+  Widget _petCard({
+    required String nickname,
+    required int todayMeals,
+    required int todayPoints,
+    required NutritionTotals todayNutrition,
+  }) {
+    final mood = _petMoodFromTodayScore(
+      todayPoints: todayPoints,
+      todayMeals: todayMeals,
+    );
+    final moodText = _petMoodHeadline(mood);
+    final adviceText = _nutritionAdvice(todayNutrition);
     return Card(
       color: AppColors.section,
       child: Padding(
@@ -126,14 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
 
             Text(
-              '$nickname, your companion is okay',
+              '$nickname, your companion is $moodText',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 4),
-            const Text(
-              'Try adding more nutritious meals',
-              style: TextStyle(fontSize: 12),
-            ),
+            Text(adviceText, style: TextStyle(fontSize: 12)),
             const SizedBox(height: 4),
             Text(
               'Meals today: $todayMeals',
@@ -143,6 +156,62 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  _PetMood _petMoodFromTodayScore({
+    required int todayPoints,
+    required int todayMeals,
+  }) {
+    if (todayMeals == 0) return _PetMood.sleeping;
+    if (todayPoints >= 8) return _PetMood.ecstatic;
+    if (todayPoints >= 3) return _PetMood.happy;
+    if (todayPoints >= 0) return _PetMood.okay;
+    if (todayPoints >= -3) return _PetMood.worried;
+    return _PetMood.upset;
+  }
+
+  String _petMoodHeadline(_PetMood mood) {
+    return switch (mood) {
+      _PetMood.sleeping => 'resting',
+      _PetMood.ecstatic => 'thriving',
+      _PetMood.happy => 'happy',
+      _PetMood.okay => 'okay',
+      _PetMood.worried => 'a bit worried',
+      _PetMood.upset => 'not feeling great',
+    };
+  }
+
+  String _nutritionAdvice(NutritionTotals totals) {
+    final energy = MealStore.barProgressFromSteps(totals.energy);
+    final sugar = MealStore.barProgressFromSteps(totals.sugar);
+    final fat = MealStore.barProgressFromSteps(totals.fat);
+    final protein = MealStore.barProgressFromSteps(totals.protein);
+    final fiber = MealStore.barProgressFromSteps(totals.fiber);
+
+    if ((energy + sugar + fat + protein + fiber) == 0) {
+      return 'Log a meal to shape today\'s balance';
+    }
+
+    if (sugar >= 0.8 && fiber < 0.4) {
+      return 'Ease up on sweets; add some fiber';
+    }
+    if (fat >= 0.8 && fiber < 0.4) {
+      return 'Go lighter on fats; add veggies/fruit';
+    }
+    if (protein < 0.4 && fiber < 0.4) {
+      return 'Try adding protein and fiber today';
+    }
+    if (protein < 0.4) {
+      return 'Try adding more protein today';
+    }
+    if (fiber < 0.4) {
+      return 'Try adding more fiber today';
+    }
+    if (energy < 0.25) {
+      return 'Add a hearty, energizing meal';
+    }
+
+    return 'Nice balance today—keep it going';
   }
 
   Widget _dailyBalanceCard({required NutritionTotals totals}) {
@@ -241,3 +310,5 @@ class _HomeViewModel {
   final MealSummary week;
   final NutritionTotals todayNutrition;
 }
+
+enum _PetMood { sleeping, ecstatic, happy, okay, worried, upset }
