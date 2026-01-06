@@ -188,26 +188,16 @@ class ProfileScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: const Text('Edit Profile'),
-                      ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () => _handleLogout(context),
-                        child: const Text('Log out'),
-                      ),
-                    ),
-                  ],
+                    onPressed: () => _handleLogout(context),
+                    child: const Text('Log out'),
+                  ),
                 ),
               ],
             ),
