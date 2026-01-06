@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'core/navigation/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'data/local/local_json_store.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Prints the exact storage location in debug mode.
+  assert(() {
+    LocalJsonStore.debugLocation().then((p) {
+      // ignore: avoid_print
+      print('MealMirror local storage: $p');
+    });
+    return true;
+  }());
+
   runApp(const MealMirrorApp());
 }
 

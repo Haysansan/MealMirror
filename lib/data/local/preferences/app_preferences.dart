@@ -1,18 +1,13 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import '../local_json_store.dart';
 
 class AppPreferences {
-  static SharedPreferences? _prefs;
-
   static Future<void> init() async {
-    _prefs ??= await SharedPreferences.getInstance();
+    // No-op: LocalJsonStore is lazy.
   }
 
-  static bool? getBool(String key) {
-    return _prefs?.getBool(key);
-  }
+  static Future<bool?> getBool(String key) => LocalJsonStore.getBool(key);
 
   static Future<void> setBool(String key, bool value) async {
-    final prefs = _prefs ??= await SharedPreferences.getInstance();
-    await prefs.setBool(key, value);
+    await LocalJsonStore.setBool(key, value);
   }
 }

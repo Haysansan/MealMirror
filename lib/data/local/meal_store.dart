@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_service.dart';
+import 'local_json_store.dart';
 
 class MealEntry {
   const MealEntry({
@@ -257,8 +257,7 @@ class MealStore {
   }
 
   static Future<List<MealEntry>> loadMeals(String username) async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_userMealsKey(username));
+    final raw = await LocalJsonStore.getString(_userMealsKey(username));
     if (raw == null || raw.isEmpty) return const [];
 
     try {
@@ -313,9 +312,9 @@ class MealStore {
       entries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
       if (needsMigration) {
-        await prefs.setString(
+        await LocalJsonStore.setJson(
           _userMealsKey(username),
-          jsonEncode(entries.map((e) => e.toJson()).toList()),
+          entries.map((e) => e.toJson()).toList(),
         );
       }
       return entries;
@@ -361,10 +360,9 @@ class MealStore {
     final meals = (await loadMeals(username)).toList();
     meals.insert(0, entry);
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
+    await LocalJsonStore.setJson(
       _userMealsKey(username),
-      jsonEncode(meals.map((e) => e.toJson()).toList()),
+      meals.map((e) => e.toJson()).toList(),
     );
 
     mealsRevision.value = mealsRevision.value + 1;
