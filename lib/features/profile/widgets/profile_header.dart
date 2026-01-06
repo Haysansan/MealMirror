@@ -11,7 +11,7 @@ class ProfileHeader extends StatelessWidget {
       future: Future.wait([
         AuthService.getCurrentUsername(),
         AuthService.getCurrentNickname(),
-      ]).then((values) => (values[0] as String?, values[1] as String?)),
+      ]).then((values) => (values[0], values[1])),
       builder: (context, snapshot) {
         final (username, nickname) = snapshot.data ?? (null, null);
         final displayName = (username?.trim().isNotEmpty ?? false)
