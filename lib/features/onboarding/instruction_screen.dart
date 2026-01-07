@@ -217,7 +217,7 @@ class _InstructionHero extends StatelessWidget {
 
     final double illoLogoTop = (viewportHeight * 0.24).clamp(170, 220);
     final double illoPetSize = (viewportWidth * 0.62).clamp(220, 290);
-    final double illoPetTop = (viewportHeight * 0.46).clamp(250, 360);
+    final double illoPetTop = (viewportHeight * 0.32).clamp(150, 250);
     final double illoPromptTop = (viewportHeight * 0.63).clamp(430, 580);
     final double illoTaglineTop = dotsTop + 26;
 
@@ -500,10 +500,12 @@ class _InstructionHero extends StatelessWidget {
               top: dotsTop,
               left: 0,
               right: 0,
-              child: _DotsIndicator(
-                activeIndex: index,
-                count: total,
-                onDotTap: onDotTap,
+              child: Center(
+                child: _DotsIndicator(
+                  activeIndex: index,
+                  count: total,
+                  onDotTap: onDotTap,
+                ),
               ),
             ),
           if (!isConversation && !isStartCta)
@@ -966,24 +968,27 @@ class _DotsIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(count, (i) {
-        final bool isActive = i == activeIndex;
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => onDotTap(i),
-          child: Container(
-            width: 12,
-            height: 12,
-            margin: const EdgeInsets.symmetric(horizontal: 2.5),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isActive ? Colors.white : const Color(0xFFDDDDDD),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(count, (i) {
+          final bool isActive = i == activeIndex;
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => onDotTap(i),
+            child: Container(
+              width: 12,
+              height: 12,
+              margin: const EdgeInsets.symmetric(horizontal: 2.5),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isActive ? Colors.white : const Color(0xFFDDDDDD),
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }
