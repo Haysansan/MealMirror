@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_routes.dart';
-import '../../core/theme/app_colors.dart';
-import '../../data/local/preferences/app_preferences.dart';
-import 'instruction_steps.dart';
+import '../../navigation/app_routes.dart';
+import '../../theme/app_colors.dart';
+import '../../../data/local/preferences/app_preferences.dart';
+import '../../../models/instruction_steps.dart';
 
 class InstructionScreen extends StatefulWidget {
   const InstructionScreen({super.key});

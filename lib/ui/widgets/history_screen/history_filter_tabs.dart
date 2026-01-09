@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../theme/app_colors.dart';
 
-import '../history_screen.dart';
+import '../../screens/history_screen.dart';
 
 class HistoryFilterTabs extends StatelessWidget {
   const HistoryFilterTabs({

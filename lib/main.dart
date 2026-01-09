@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'core/navigation/app_router.dart';
-import 'core/theme/app_theme.dart';
+import 'ui/navigation/app_router.dart';
+import 'ui/theme/app_theme.dart';
 import 'data/local/local_json_store.dart';
 
 Future<void> main() async {

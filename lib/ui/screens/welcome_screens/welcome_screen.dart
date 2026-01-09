@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_routes.dart';
-import '../../core/theme/app_colors.dart';
+import '../../navigation/app_routes.dart';
+import '../../theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

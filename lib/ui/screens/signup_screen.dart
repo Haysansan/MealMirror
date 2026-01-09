@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_routes.dart';
-import '../../core/theme/app_colors.dart';
+import '../navigation/app_routes.dart';
+import '../theme/app_colors.dart';
 import '../../data/local/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_routes.dart';
+import '../navigation/app_routes.dart';
 import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
-import '../../shared/widgets/app_scaffold.dart';
-import '../../shared/widgets/stat_bar.dart';
-import 'widgets/quick_action_row.dart';
-import '../../core/theme/app_colors.dart';
+import '../widgets/reusable/app_scaffold.dart';
+import '../widgets/reusable/stat_bar.dart';
+import '../widgets/home_screen/quick_action_row.dart';
+import '../theme/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

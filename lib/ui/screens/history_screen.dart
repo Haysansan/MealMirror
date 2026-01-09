@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../theme/app_colors.dart';
 import '../../data/local/meal_store.dart';
-import '../../shared/widgets/app_scaffold.dart';
-import 'widgets/history_filter_tabs.dart';
-import 'widgets/history_stat_card.dart';
-import 'widgets/meal_log_list.dart';
+import '../widgets/reusable/app_scaffold.dart';
+import '../widgets/history_screen/history_filter_tabs.dart';
+import '../widgets/history_screen/history_stat_card.dart';
+import '../widgets/history_screen/meal_log_list.dart';
 
 enum HistoryRange { daily, weekly }
 

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_routes.dart';
-import 'widgets/profile_header.dart';
-import 'widgets/profile_stat_row.dart';
-import '../../core/theme/app_colors.dart';
+import '../navigation/app_routes.dart';
+import '../widgets/profile_screen/profile_header.dart';
+import '../widgets/profile_screen/profile_stat_row.dart';
+import '../theme/app_colors.dart';
 import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
-import '../../shared/widgets/app_scaffold.dart';
+import '../widgets/reusable/app_scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

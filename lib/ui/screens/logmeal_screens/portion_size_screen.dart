@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_routes.dart';
-import '../../core/theme/app_colors.dart';
-import '../../shared/widgets/app_scaffold.dart';
-import 'widgets/nutrition_selector.dart';
-import 'widgets/meal_input_card.dart';
-import 'log_meal_categories.dart';
-import 'log_meal_flow_args.dart';
+import '../../navigation/app_routes.dart';
+import '../../theme/app_colors.dart';
+import '../../widgets/reusable/app_scaffold.dart';
+import '../../widgets/logmeal_screen/nutrition_selector.dart';
+import '../../widgets/logmeal_screen/meal_input_card.dart';
+import '../../../models/log_meal_categories.dart';
+import '../../../models/log_meal_flow_args.dart';
 
 class PortionSizeScreen extends StatefulWidget {
   const PortionSizeScreen({super.key, required this.selectedCategories});

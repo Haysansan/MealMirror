@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../theme/app_colors.dart';
 
 import '../../../data/local/meal_store.dart';
-import '../../../shared/widgets/stat_bar.dart';
+import '../reusable/stat_bar.dart';
 
 class HistoryStatCard extends StatelessWidget {
   final String title;
