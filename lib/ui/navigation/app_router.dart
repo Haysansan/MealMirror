@@ -1,16 +1,16 @@
 import 'package:go_router/go_router.dart';
 
 import 'app_routes.dart';
-import '../screens/signup_screen.dart';
-import '../screens/home_screen.dart';
+import '../screens/welcome_screens/signup_screen.dart';
+import '../screens/home_screens/home_screen.dart';
 import '../../domain/models/log_meal_flow_args.dart';
 import '../screens/logmeal_screens/log_meal_screen.dart';
 import '../screens/logmeal_screens/portion_size_screen.dart';
 import '../screens/logmeal_screens/processing_level_screen.dart';
 import '../screens/welcome_screens/instruction_screen.dart';
 import '../screens/welcome_screens/welcome_screen.dart';
-import '../screens/profile_screen.dart';
-import '../screens/history_screen.dart';
+import '../screens/profile_screens/profile_screen.dart';
+import '../screens/history_screens/history_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(

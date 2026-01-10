@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../navigation/app_routes.dart';
 import '../../theme/app_colors.dart';
-import '../../../data/local/meal_store.dart';
+import '../../../data/meal_store.dart';
 import '../../widgets/reusable/app_scaffold.dart';
 import '../../widgets/logmeal_screen/nutrition_selector.dart';
 import '../../widgets/logmeal_screen/meal_input_card.dart';

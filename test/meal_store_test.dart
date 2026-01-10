@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:mealmirror/data/local/meal_store.dart';
+import 'package:mealmirror/data/meal_store.dart';
 
 void main() {
   test('computeMealNutrition supports category variants', () {

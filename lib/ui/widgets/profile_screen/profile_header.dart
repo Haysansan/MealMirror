@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
-import '../../../data/local/auth_service.dart';
+import '../../../data/auth_service.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});

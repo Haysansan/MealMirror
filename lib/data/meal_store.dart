@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../../domain/models/meal_entry.dart';
-import '../../domain/models/meal_summary.dart';
+import '../domain/models/meal_entry.dart';
+import '../domain/models/meal_summary.dart';
 
 class MealStore {
   static Database? _db;

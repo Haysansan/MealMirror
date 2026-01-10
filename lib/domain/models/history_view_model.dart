@@ -1,4 +1,4 @@
-import '../../data/local/meal_store.dart';
+import '../../data/meal_store.dart';
 import 'history_range.dart';
 import 'meal_entry.dart';
 import 'meal_summary.dart';

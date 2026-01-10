@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../navigation/app_routes.dart';
-import '../../data/local/auth_service.dart';
-import '../../data/local/meal_store.dart';
-import '../widgets/reusable/app_scaffold.dart';
-import '../widgets/reusable/stat_bar.dart';
-import '../../domain/models/meal_summary.dart';
-import '../../domain/services/summary_service.dart';
-import '../../domain/services/nutrition_service.dart';
-import '../widgets/home_screen/quick_action_row.dart';
-import '../theme/app_colors.dart';
+import '../../navigation/app_routes.dart';
+import '../../../data/auth_service.dart';
+import '../../../data/meal_store.dart';
+import '../../widgets/reusable/app_scaffold.dart';
+import '../../widgets/reusable/stat_bar.dart';
+import '../../../domain/models/meal_summary.dart';
+import '../../../domain/services/summary_service.dart';
+import '../../../domain/services/nutrition_service.dart';
+import '../../widgets/home_screen/quick_action_row.dart';
+import '../../theme/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<_HomeViewModel> _future;
 
   void _onMealsChanged() {
-    // Auto-refresh when a meal is added/updated.
     if (!mounted) return;
     _refresh();
   }
