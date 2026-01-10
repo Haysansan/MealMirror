@@ -32,7 +32,6 @@ lib/
   main.dart
   data/
     meal_repository.dart
-    meal_store.dart
     user_repository.dart
   domain/
     models/
@@ -44,10 +43,8 @@ lib/
       instruction_view.dart
       log_meal_categories.dart
       log_meal_flow_args.dart
-      meal.dart
       meal_entry.dart
       meal_summary.dart
-      nutrition_totals.dart
       pet_mood.dart
       profile_view_model.dart
       user.dart
