@@ -8,6 +8,7 @@ import 'package:mealmirror/ui/screens/logmeal_screens/log_meal_screen.dart';
 import 'package:mealmirror/ui/screens/logmeal_screens/portion_size_screen.dart';
 import 'package:mealmirror/ui/screens/logmeal_screens/processing_level_screen.dart';
 import 'package:mealmirror/ui/screens/welcome_screens/instruction_screen.dart';
+import 'package:mealmirror/domain/models/instruction_steps.dart';
 import 'package:mealmirror/ui/screens/welcome_screens/welcome_screen.dart';
 import 'package:mealmirror/ui/screens/profile_screens/profile_screen.dart';
 import 'package:mealmirror/ui/screens/history_screens/history_screen.dart';
@@ -28,7 +29,7 @@ class AppRouter {
 
       GoRoute(
         path: AppRoutes.instruction,
-        builder: (context, state) => const InstructionScreen(steps: []),
+        builder: (context, state) => InstructionScreen(steps: instructionSteps),
       ),
 
       GoRoute(
