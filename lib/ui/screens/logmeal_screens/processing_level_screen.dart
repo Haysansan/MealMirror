@@ -8,7 +8,7 @@ import '../../widgets/reusable/app_scaffold.dart';
 import '../../widgets/logmeal_screen/nutrition_selector.dart';
 import '../../widgets/logmeal_screen/meal_input_card.dart';
 import '../../widgets/logmeal_screen/selection_pill.dart';
-import '../../../models/log_meal_categories.dart';
+import '../../../domain/models/log_meal_categories.dart';
 
 class ProcessingLevelScreen extends StatefulWidget {
   const ProcessingLevelScreen({
@@ -67,14 +67,22 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
       _isSaving = true;
     });
 
-    await MealStore.addMealForCurrentUser(
-      categories: widget.selectedCategories,
-      portion: widget.selectedPortion,
-      processing: processing,
-    );
+    try {
+      await MealStore.addMealForCurrentUser(
+        categories: widget.selectedCategories,
+        portion: widget.selectedPortion.toLowerCase(),
+        processing: processing.toLowerCase(),
+      );
 
-    if (!mounted) return;
-    context.go(AppRoutes.home);
+      if (!mounted) return;
+      context.go(AppRoutes.home);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
   }
 
   @override

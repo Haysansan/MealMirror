@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'app_routes.dart';
 import '../screens/signup_screen.dart';
 import '../screens/home_screen.dart';
-import '../../models/log_meal_flow_args.dart';
+import '../../domain/models/log_meal_flow_args.dart';
 import '../screens/logmeal_screens/log_meal_screen.dart';
 import '../screens/logmeal_screens/portion_size_screen.dart';
 import '../screens/logmeal_screens/processing_level_screen.dart';
@@ -28,7 +28,7 @@ class AppRouter {
 
       GoRoute(
         path: AppRoutes.instruction,
-        builder: (context, state) => const InstructionScreen(),
+        builder: (context, state) => const InstructionScreen(steps: []),
       ),
 
       GoRoute(

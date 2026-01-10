@@ -1,0 +1,1 @@
+enum HistoryRange { daily, weekly }

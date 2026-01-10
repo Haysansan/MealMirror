@@ -7,6 +7,7 @@ import '../widgets/profile_screen/profile_stat_row.dart';
 import '../theme/app_colors.dart';
 import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
+import '../../domain/services/summary_service.dart';
 import '../widgets/reusable/app_scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -16,30 +17,24 @@ class ProfileScreen extends StatelessWidget {
     required int trackedDays,
     required int spanDays,
   }) {
-    if (spanDays <= 0) return 'Low';
-    final ratio = trackedDays / spanDays;
-    if (ratio >= 0.7) return 'High';
-    if (ratio >= 0.4) return 'Medium';
-    return 'Low';
+    return SummaryService.habitStabilityLabel(
+      trackedDays: trackedDays,
+      spanDays: spanDays,
+    );
   }
 
   static int _uniqueTrackedDays(Iterable<MealEntry> meals) {
-    return meals.map((m) => m.date).toSet().length;
+    return SummaryService.uniqueTrackedDays<MealEntry>(
+      meals: meals,
+      getDate: (m) => m.date,
+    );
   }
 
   static int _allTimeSpanDays(Iterable<MealEntry> meals) {
-    if (meals.isEmpty) return 0;
-
-    DateTime oldest = meals.first.createdAt;
-    DateTime newest = meals.first.createdAt;
-    for (final meal in meals) {
-      if (meal.createdAt.isBefore(oldest)) oldest = meal.createdAt;
-      if (meal.createdAt.isAfter(newest)) newest = meal.createdAt;
-    }
-
-    final start = DateTime(oldest.year, oldest.month, oldest.day);
-    final end = DateTime(newest.year, newest.month, newest.day);
-    return end.difference(start).inDays + 1;
+    return SummaryService.allTimeSpanDays<MealEntry>(
+      meals: meals,
+      getCreatedAt: (m) => m.createdAt,
+    );
   }
 
   static MealSummary _summarizeForRange(
@@ -47,15 +42,14 @@ class ProfileScreen extends StatelessWidget {
     required DateTime startInclusive,
     required DateTime endExclusive,
   }) {
-    final rangeMeals = meals
-        .where(
-          (m) =>
-              !m.createdAt.isBefore(startInclusive) &&
-              m.createdAt.isBefore(endExclusive),
-        )
-        .toList();
-    final total = rangeMeals.fold<int>(0, (sum, m) => sum + m.points);
-    return MealSummary(mealCount: rangeMeals.length, totalPoints: total);
+    final s = SummaryService.summarizeForRange<MealEntry>(
+      meals: meals,
+      startInclusive: startInclusive,
+      endExclusive: endExclusive,
+      getCreatedAt: (m) => m.createdAt,
+      getPoints: (m) => m.points,
+    );
+    return MealSummary(mealCount: s.mealCount, totalPoints: s.totalPoints);
   }
 
   Future<void> _handleLogout(BuildContext context) async {

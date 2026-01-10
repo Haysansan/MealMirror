@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../../data/local/meal_store.dart';
+import '../../domain/models/history_range.dart';
+import '../../domain/services/history_service.dart';
 import '../widgets/reusable/app_scaffold.dart';
 import '../widgets/history_screen/history_filter_tabs.dart';
 import '../widgets/history_screen/history_stat_card.dart';
 import '../widgets/history_screen/meal_log_list.dart';
-
-enum HistoryRange { daily, weekly }
+import '../../domain/models/history_range.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -51,41 +52,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
     });
   }
 
-  String _dateKey(DateTime dt) {
-    final y = dt.year.toString().padLeft(4, '0');
-    final m = dt.month.toString().padLeft(2, '0');
-    final d = dt.day.toString().padLeft(2, '0');
-    return '$y-$m-$d';
-  }
-
-  DateTime _startOfWeek(DateTime now) {
-    final int delta = now.weekday - DateTime.monday;
-    return DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).subtract(Duration(days: delta));
-  }
-
   List<MealEntry> _filterMealsForRange(List<MealEntry> meals, DateTime now) {
-    if (_range == HistoryRange.daily) {
-      final todayKey = _dateKey(now);
-      return meals.where((m) => m.date == todayKey).toList();
-    }
-
-    final start = _startOfWeek(now);
-    final endExclusive = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).add(const Duration(days: 1));
-    return meals
-        .where(
-          (m) =>
-              !m.createdAt.isBefore(start) &&
-              m.createdAt.isBefore(endExclusive),
-        )
-        .toList();
+    return HistoryService.filterMealsForRange<MealEntry>(
+      meals,
+      now,
+      _range,
+      getDate: (m) => m.date,
+      getCreatedAt: (m) => m.createdAt,
+    );
   }
 
   @override

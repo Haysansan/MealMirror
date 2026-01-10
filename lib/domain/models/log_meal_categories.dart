@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../ui/theme/app_colors.dart';
+import '../../ui/theme/app_colors.dart';
 
 /// categories used throughout the Log Meal flow.
-///
-/// IMPORTANT:
-/// - [key] is the value stored/passed through the flow
 class LogMealCategoryInfo {
   const LogMealCategoryInfo({
     required this.key,

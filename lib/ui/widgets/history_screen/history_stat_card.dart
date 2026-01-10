@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
+import '../../../domain/models/meal_summary.dart';
 
-import '../../../data/local/meal_store.dart';
+import '../../../domain/services/nutrition_service.dart';
 import '../reusable/stat_bar.dart';
 
 class HistoryStatCard extends StatelessWidget {
@@ -24,27 +25,27 @@ class HistoryStatCard extends StatelessWidget {
 
             _nutritionRow(
               'Daily Power (Energy)',
-              MealStore.barProgressFromSteps(totals.energy),
+              NutritionService.barProgressFromSteps(totals.energy),
               fillColor: AppColors.grainStarches,
             ),
             _nutritionRow(
               'Sweet Level (Sugar)',
-              MealStore.barProgressFromSteps(totals.sugar),
+              NutritionService.barProgressFromSteps(totals.sugar),
               fillColor: AppColors.snacks,
             ),
             _nutritionRow(
               'Fat Fuel (Fat)',
-              MealStore.barProgressFromSteps(totals.fat),
+              NutritionService.barProgressFromSteps(totals.fat),
               fillColor: AppColors.oilsFats,
             ),
             _nutritionRow(
               'Grow Power (Protein)',
-              MealStore.barProgressFromSteps(totals.protein),
+              NutritionService.barProgressFromSteps(totals.protein),
               fillColor: AppColors.meatSeafood,
             ),
             _nutritionRow(
               'Gut Guard (Fiber)',
-              MealStore.barProgressFromSteps(totals.fiber),
+              NutritionService.barProgressFromSteps(totals.fiber),
               fillColor: AppColors.veggieFruits,
             ),
           ],

@@ -6,6 +6,9 @@ import '../../data/local/auth_service.dart';
 import '../../data/local/meal_store.dart';
 import '../widgets/reusable/app_scaffold.dart';
 import '../widgets/reusable/stat_bar.dart';
+import '../../domain/models/meal_summary.dart';
+import '../../domain/services/summary_service.dart';
+import '../../domain/services/nutrition_service.dart';
 import '../widgets/home_screen/quick_action_row.dart';
 import '../theme/app_colors.dart';
 
@@ -133,8 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _weekAverage(MealSummary? week) {
     if (week == null) return 0;
-    if (week.mealCount == 0) return 0;
-    return (week.totalPoints / week.mealCount).round();
+    return SummaryService.weekAverage(
+      totalPoints: week.totalPoints,
+      mealCount: week.mealCount,
+    );
   }
 
   String _formatSigned(int value) {
@@ -224,36 +229,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String _nutritionAdvice(NutritionTotals totals) {
-    final energy = MealStore.barProgressFromSteps(totals.energy);
-    final sugar = MealStore.barProgressFromSteps(totals.sugar);
-    final fat = MealStore.barProgressFromSteps(totals.fat);
-    final protein = MealStore.barProgressFromSteps(totals.protein);
-    final fiber = MealStore.barProgressFromSteps(totals.fiber);
-
-    if ((energy + sugar + fat + protein + fiber) == 0) {
-      return 'Log a meal to shape today\'s balance';
-    }
-
-    if (sugar >= 0.8 && fiber < 0.4) {
-      return 'Ease up on sweets; add some fiber';
-    }
-    if (fat >= 0.8 && fiber < 0.4) {
-      return 'Go lighter on fats; add veggies/fruit';
-    }
-    if (protein < 0.4 && fiber < 0.4) {
-      return 'Try adding protein and fiber today';
-    }
-    if (protein < 0.4) {
-      return 'Try adding more protein today';
-    }
-    if (fiber < 0.4) {
-      return 'Try adding more fiber today';
-    }
-    if (energy < 0.25) {
-      return 'Add a hearty, energizing meal';
-    }
-
-    return 'Nice balance today—keep it going';
+    return SummaryService.nutritionAdvice(
+      energy: totals.energy,
+      sugar: totals.sugar,
+      fat: totals.fat,
+      protein: totals.protein,
+      fiber: totals.fiber,
+    );
   }
 
   Widget _dailyBalanceCard({required NutritionTotals totals}) {
@@ -274,27 +256,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
             _balanceRow(
               'Daily Power (ENERGY)',
-              MealStore.barProgressFromSteps(totals.energy),
+              NutritionService.barProgressFromSteps(totals.energy),
               fillColor: AppColors.grainStarches,
             ),
             _balanceRow(
               'Sweet Level (SUGAR)',
-              MealStore.barProgressFromSteps(totals.sugar),
+              NutritionService.barProgressFromSteps(totals.sugar),
               fillColor: AppColors.snacks,
             ),
             _balanceRow(
               'Fat Fuel (FAT)',
-              MealStore.barProgressFromSteps(totals.fat),
+              NutritionService.barProgressFromSteps(totals.fat),
               fillColor: AppColors.oilsFats,
             ),
             _balanceRow(
               'Grow Power (PROTEIN)',
-              MealStore.barProgressFromSteps(totals.protein),
+              NutritionService.barProgressFromSteps(totals.protein),
               fillColor: AppColors.meatSeafood,
             ),
             _balanceRow(
               'Gut Guard (FIBER)',
-              MealStore.barProgressFromSteps(totals.fiber),
+              NutritionService.barProgressFromSteps(totals.fiber),
               fillColor: AppColors.veggieFruits,
             ),
           ],

@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../navigation/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/reusable/app_scaffold.dart';
-import '../../../models/log_meal_flow_args.dart';
-import '../../../models/log_meal_categories.dart';
+import '../../../domain/models/log_meal_flow_args.dart';
+import '../../../domain/models/log_meal_categories.dart';
 import '../../widgets/logmeal_screen/meal_input_card.dart';
 
 class LogMealScreen extends StatefulWidget {
