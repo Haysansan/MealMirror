@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'ui/navigation/app_router.dart';
 import 'ui/theme/app_theme.dart';
 import 'package:sqflite/sqflite.dart';
@@ -6,17 +7,17 @@ import 'package:path/path.dart' as p;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Prints SQLite database locations in debug mode.
   assert(() {
-    getDatabasesPath().then((dbPath) {
-      final authDb = p.join(dbPath, 'auth.db');
-      final mealsDb = p.join(dbPath, 'meals.db');
-      // ignore: avoid_print
-      print('MealMirror auth DB: $authDb');
-      // ignore: avoid_print
-      print('MealMirror meals DB: $mealsDb');
-    });
+    if (!kIsWeb) {
+      getDatabasesPath().then((dbPath) {
+        final authDb = p.join(dbPath, 'auth.db');
+        final mealsDb = p.join(dbPath, 'meals.db');
+        // ignore: avoid_print
+        print('MealMirror auth DB: $authDb');
+        // ignore: avoid_print
+        print('MealMirror meals DB: $mealsDb');
+      });
+    }
     return true;
   }());
 
