@@ -3,7 +3,11 @@ import 'package:mealmirror/domain/models/instruction_step.dart' hide TextSpan;
 import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class SoftCircle extends StatelessWidget {
-  const SoftCircle({required this.diameter, required this.noiseColor});
+  const SoftCircle({
+    super.key,
+    required this.diameter,
+    required this.noiseColor,
+  });
 
   final double diameter;
   final Color noiseColor;
@@ -37,7 +41,7 @@ class SoftCircle extends StatelessWidget {
 }
 
 class PetImage extends StatelessWidget {
-  const PetImage({required this.size, required this.height});
+  const PetImage({super.key, required this.size, required this.height});
 
   final double size;
   final double height;
@@ -64,7 +68,7 @@ class PetImage extends StatelessWidget {
 }
 
 class PetIcon extends StatelessWidget {
-  const PetIcon({required this.size});
+  const PetIcon({super.key, required this.size});
 
   final double size;
 
@@ -82,7 +86,7 @@ class PetIcon extends StatelessWidget {
 }
 
 class LogoText extends StatelessWidget {
-  const LogoText({required this.fontSize});
+  const LogoText({super.key, required this.fontSize});
 
   final double fontSize;
 
@@ -113,7 +117,7 @@ class LogoText extends StatelessWidget {
 }
 
 class TaglineText extends StatelessWidget {
-  const TaglineText();
+  const TaglineText({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +139,7 @@ class TaglineText extends StatelessWidget {
 }
 
 class MessageText extends StatelessWidget {
-  const MessageText({required this.message});
+  const MessageText({super.key, required this.message});
 
   final String message;
 
@@ -170,7 +174,7 @@ class MessageText extends StatelessWidget {
 }
 
 class PromptText extends StatelessWidget {
-  const PromptText({required this.prompt});
+  const PromptText({super.key, required this.prompt});
 
   final String prompt;
 
@@ -200,7 +204,7 @@ class PromptText extends StatelessWidget {
 }
 
 class MeetTitle extends StatelessWidget {
-  const MeetTitle({required this.name});
+  const MeetTitle({super.key, required this.name});
 
   final String name;
 
@@ -229,7 +233,7 @@ class MeetTitle extends StatelessWidget {
 }
 
 class CompanionLine extends StatelessWidget {
-  const CompanionLine({required this.line});
+  const CompanionLine({super.key, required this.line});
 
   final String line;
 
@@ -258,7 +262,11 @@ class CompanionLine extends StatelessWidget {
 }
 
 class ConversationText extends StatelessWidget {
-  const ConversationText({required this.block, required this.alignLeft});
+  const ConversationText({
+    super.key,
+    required this.block,
+    required this.alignLeft,
+  });
 
   final ConversationBlock block;
   final bool alignLeft;
@@ -296,6 +304,7 @@ class ConversationText extends StatelessWidget {
 
 class DotsIndicator extends StatelessWidget {
   const DotsIndicator({
+    super.key,
     required this.activeIndex,
     required this.count,
     required this.onDotTap,
