@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../navigation/app_routes.dart';
-import '../../theme/app_colors.dart';
-import '../../widgets/reusable/app_scaffold.dart';
-import '../../../domain/models/log_meal_flow_args.dart';
-import '../../../domain/models/log_meal_categories.dart';
-import '../../widgets/logmeal_screen/meal_input_card.dart';
+import 'package:mealmirror/ui/navigation/app_routes.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
+import 'package:mealmirror/domain/models/log_meal_flow_args.dart';
+import 'package:mealmirror/domain/models/log_meal_categories.dart';
+import 'package:mealmirror/ui/widgets/logmeal_screen/meal_input_card.dart';
 
 class LogMealScreen extends StatefulWidget {
   const LogMealScreen({super.key});

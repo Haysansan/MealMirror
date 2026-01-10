@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../navigation/app_routes.dart';
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/ui/navigation/app_routes.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key});

@@ -1,4 +1,6 @@
-import '../services/nutrition_service.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
+import 'package:mealmirror/domain/models/pet_mood.dart';
+import 'nutrition_service.dart';
 
 class SummaryService {
   static int weekAverage({required int totalPoints, required int mealCount}) {
@@ -44,9 +46,16 @@ class SummaryService {
 
   static int uniqueTrackedDays<T>({
     required Iterable<T> meals,
-    required String? Function(T item) getDate,
+    required DateTime? Function(T item) getDate, // prefer DateTime?
   }) {
-    return meals.map(getDate).whereType<String>().toSet().length;
+    return meals
+        .map(getDate)
+        .whereType<DateTime>()
+        .map((d) {
+          return DateTime(d.year, d.month, d.day);
+        })
+        .toSet()
+        .length;
   }
 
   static int allTimeSpanDays<T>({
@@ -63,7 +72,8 @@ class SummaryService {
     return end.difference(start).inDays + 1;
   }
 
-  static ({int mealCount, int totalPoints}) summarizeForRange<T>({
+  // Generic range summarizer returns MealSummary model
+  static MealSummary summarizeForRange<T>({
     required List<T> meals,
     required DateTime startInclusive,
     required DateTime endExclusive,
@@ -76,7 +86,69 @@ class SummaryService {
           !created.isBefore(startInclusive) &&
           created.isBefore(endExclusive);
     }).toList();
+
     final total = rangeMeals.fold<int>(0, (sum, m) => sum + getPoints(m));
-    return (mealCount: rangeMeals.length, totalPoints: total);
+    return MealSummary(mealCount: rangeMeals.length, totalPoints: total);
+  }
+
+  // Convenience helpers
+  static MealSummary summarizeForToday<T>({
+    required List<T> meals,
+    required DateTime now,
+    required DateTime? Function(T item) getCreatedAt,
+    required int Function(T item) getPoints,
+  }) {
+    final start = DateTime(now.year, now.month, now.day);
+    final end = start.add(const Duration(days: 1));
+    return summarizeForRange(
+      meals: meals,
+      startInclusive: start,
+      endExclusive: end,
+      getCreatedAt: getCreatedAt,
+      getPoints: getPoints,
+    );
+  }
+
+  static MealSummary summarizeForThisWeek<T>({
+    required List<T> meals,
+    required DateTime now,
+    required DateTime? Function(T item) getCreatedAt,
+    required int Function(T item) getPoints,
+  }) {
+    // start of week with Monday as first day:
+    final startOfWeek = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(Duration(days: now.weekday - 1));
+    final end = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).add(const Duration(days: 1));
+    return summarizeForRange(
+      meals: meals,
+      startInclusive: DateTime(
+        startOfWeek.year,
+        startOfWeek.month,
+        startOfWeek.day,
+      ),
+      endExclusive: end,
+      getCreatedAt: getCreatedAt,
+      getPoints: getPoints,
+    );
+  }
+
+  /// Decide a pet mood from today's points and meal count.
+  static PetMood petMoodFromScore({
+    required int todayPoints,
+    required int todayMeals,
+  }) {
+    if (todayMeals == 0) return PetMood.sleeping;
+    if (todayPoints >= 8) return PetMood.ecstatic;
+    if (todayPoints >= 3) return PetMood.happy;
+    if (todayPoints >= 0) return PetMood.okay;
+    if (todayPoints >= -3) return PetMood.worried;
+    return PetMood.upset;
   }
 }

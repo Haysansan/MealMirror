@@ -1,56 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../navigation/app_routes.dart';
-import '../../widgets/profile_screen/profile_header.dart';
-import '../../widgets/profile_screen/profile_stat_row.dart';
-import '../../theme/app_colors.dart';
-import '../../../data/auth_service.dart';
-import '../../../data/meal_store.dart';
-import '../../../domain/services/summary_service.dart';
-import '../../widgets/reusable/app_scaffold.dart';
+import 'package:mealmirror/data/auth_service.dart';
+import 'package:mealmirror/data/meal_store.dart';
+import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
+import 'package:mealmirror/ui/widgets/profile_screen/profile_header.dart';
+import 'package:mealmirror/ui/widgets/profile_screen/profile_stat_row.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/domain/models/profile_view_model.dart';
+import 'package:mealmirror/domain/models/meal_entry.dart';
+import 'package:mealmirror/domain/services/summary_service.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
+import 'package:mealmirror/ui/navigation/app_routes.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
-
-  static String _habitStabilityLabel({
-    required int trackedDays,
-    required int spanDays,
-  }) {
-    return SummaryService.habitStabilityLabel(
-      trackedDays: trackedDays,
-      spanDays: spanDays,
-    );
-  }
-
-  static int _uniqueTrackedDays(Iterable<MealEntry> meals) {
-    return SummaryService.uniqueTrackedDays<MealEntry>(
-      meals: meals,
-      getDate: (m) => m.date,
-    );
-  }
-
-  static int _allTimeSpanDays(Iterable<MealEntry> meals) {
-    return SummaryService.allTimeSpanDays<MealEntry>(
-      meals: meals,
-      getCreatedAt: (m) => m.createdAt,
-    );
-  }
-
-  static MealSummary _summarizeForRange(
-    List<MealEntry> meals, {
-    required DateTime startInclusive,
-    required DateTime endExclusive,
-  }) {
-    final s = SummaryService.summarizeForRange<MealEntry>(
-      meals: meals,
-      startInclusive: startInclusive,
-      endExclusive: endExclusive,
-      getCreatedAt: (m) => m.createdAt,
-      getPoints: (m) => m.points,
-    );
-    return MealSummary(mealCount: s.mealCount, totalPoints: s.totalPoints);
-  }
 
   Future<void> _handleLogout(BuildContext context) async {
     final confirm = await showDialog<bool>(
@@ -106,29 +70,13 @@ class ProfileScreen extends StatelessWidget {
         future: mealsFuture,
         builder: (context, snapshot) {
           final meals = snapshot.data ?? const <MealEntry>[];
-          final now = DateTime.now();
-          final todayStart = DateTime(now.year, now.month, now.day);
+          final vm = ProfileViewModel.fromMeals(meals);
 
-          // Last 30 days includes today.
-          final last30Start = todayStart.subtract(const Duration(days: 29));
-          final last30EndExclusive = todayStart.add(const Duration(days: 1));
-
-          final last30Summary = _summarizeForRange(
-            meals,
-            startInclusive: last30Start,
-            endExclusive: last30EndExclusive,
-          );
-          final last30TrackedDays = _uniqueTrackedDays(
-            meals.where(
-              (m) =>
-                  !m.createdAt.isBefore(last30Start) &&
-                  m.createdAt.isBefore(last30EndExclusive),
-            ),
-          );
-          final last30AvgPoints = (last30Summary.totalPoints / 30).round();
-
-          final allTimeTrackedDays = _uniqueTrackedDays(meals);
-          final allTimeSpanDays = _allTimeSpanDays(meals);
+          final last30Summary = vm.last30Summary;
+          final last30TrackedDays = vm.last30TrackedDays;
+          final last30AvgPoints = vm.last30AvgPoints;
+          final allTimeTrackedDays = vm.allTimeTrackedDays;
+          final allTimeSpanDays = vm.allTimeSpanDays;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -137,7 +85,6 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 const ProfileHeader(),
                 const SizedBox(height: 16),
-
                 _statCard(
                   title: 'Last 30 Days',
                   stats: [
@@ -151,16 +98,14 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     ProfileStatRow(
                       label: 'Habit Stability',
-                      value: _habitStabilityLabel(
+                      value: SummaryService.habitStabilityLabel(
                         trackedDays: last30TrackedDays,
                         spanDays: 30,
                       ),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 12),
-
                 _statCard(
                   title: 'All Time',
                   stats: [
@@ -174,16 +119,14 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     ProfileStatRow(
                       label: 'Habit Stability',
-                      value: _habitStabilityLabel(
+                      value: SummaryService.habitStabilityLabel(
                         trackedDays: allTimeTrackedDays,
                         spanDays: allTimeSpanDays,
                       ),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 20),
-
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

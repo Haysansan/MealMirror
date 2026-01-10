@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class QuickActionRow extends StatelessWidget {
   const QuickActionRow({

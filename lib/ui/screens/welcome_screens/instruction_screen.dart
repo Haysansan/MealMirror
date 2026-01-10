@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../domain/models/instruction_step.dart';
-import '../../navigation/app_routes.dart';
-import '../../theme/app_colors.dart';
-import '../../../domain/models/instruction_view.dart';
-import '../../widgets/onBoarding/instruction_hero.dart';
+import 'package:mealmirror/domain/models/instruction_step.dart';
+import 'package:mealmirror/ui/navigation/app_routes.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/domain/models/instruction_view.dart';
+import 'package:mealmirror/ui/widgets/onBoarding/instruction_hero.dart';
 
 class InstructionScreen extends StatefulWidget {
   final List<InstructionStep> steps;

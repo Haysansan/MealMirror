@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/models/history_range.dart';
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/domain/models/history_range.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class HistoryFilterTabs extends StatelessWidget {
   const HistoryFilterTabs({

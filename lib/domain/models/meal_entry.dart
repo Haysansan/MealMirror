@@ -5,6 +5,7 @@ class MealEntry {
   final List<String> categories;
   final String portion;
   final String processing;
+  final int points;
 
   const MealEntry({
     required this.id,
@@ -13,6 +14,7 @@ class MealEntry {
     required this.categories,
     required this.portion,
     required this.processing,
+    this.points = 0,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class MealEntry {
       'categories': categories.join(','),
       'portion': portion,
       'processing': processing,
+      'points': points,
     };
   }
 
@@ -33,6 +36,7 @@ class MealEntry {
       categories: (map['categories'] as String?)?.split(',') ?? [],
       portion: map['portion'] as String? ?? '',
       processing: map['processing'] as String? ?? '',
+      points: int.tryParse(map['points']?.toString() ?? '') ?? 0,
     );
   }
 }

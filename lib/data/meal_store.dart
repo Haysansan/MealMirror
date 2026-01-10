@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../domain/models/meal_entry.dart';
-import '../domain/models/meal_summary.dart';
+import 'package:mealmirror/domain/models/meal_entry.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
 
 class MealStore {
   static Database? _db;
 
-  static final ValueNotifier<void> mealsRevision = ValueNotifier<void>(null);
+  static final ValueNotifier<int> mealsRevision = ValueNotifier<int>(0);
 
   static Future<Database> _openDb() async {
     if (_db != null) return _db!;
@@ -42,7 +42,7 @@ class MealStore {
       meal.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    mealsRevision.notifyListeners();
+    mealsRevision.value++;
   }
 
   static Future<void> addMealForCurrentUser({
@@ -87,9 +87,57 @@ class MealStore {
   static Future<void> deleteMeal(String id) async {
     final db = await _openDb();
     await db.delete('meals', where: 'id = ?', whereArgs: [id]);
-    mealsRevision.notifyListeners();
+    mealsRevision.value++;
   }
 
+  // Returns MealSummary for today. Optional getPoints lets caller provide point logic.
+  static MealSummary summarizeForToday(
+    List<MealEntry> meals,
+    DateTime now, {
+    int Function(MealEntry)? getPoints,
+  }) {
+    final gp = getPoints ?? ((_) => 0);
+    final start = DateTime(now.year, now.month, now.day);
+    final end = start.add(const Duration(days: 1));
+    final rangeMeals = meals.where((m) {
+      final c = m.createdAt;
+      return !c.isBefore(start) && c.isBefore(end);
+    }).toList();
+    final total = rangeMeals.fold<int>(0, (s, m) => s + gp(m));
+    return MealSummary(mealCount: rangeMeals.length, totalPoints: total);
+  }
+
+  // Returns MealSummary for the current week (Monday..Sunday). Optional getPoints parameter.
+  static MealSummary summarizeForThisWeek(
+    List<MealEntry> meals,
+    DateTime now, {
+    int Function(MealEntry)? getPoints,
+  }) {
+    final gp = getPoints ?? ((_) => 0);
+    final startOfWeekDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(Duration(days: now.weekday - 1));
+    final start = DateTime(
+      startOfWeekDate.year,
+      startOfWeekDate.month,
+      startOfWeekDate.day,
+    );
+    final end = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).add(const Duration(days: 1));
+    final rangeMeals = meals.where((m) {
+      final c = m.createdAt;
+      return !c.isBefore(start) && c.isBefore(end);
+    }).toList();
+    final total = rangeMeals.fold<int>(0, (s, m) => s + gp(m));
+    return MealSummary(mealCount: rangeMeals.length, totalPoints: total);
+  }
+
+  // Nutrition totals (existing logic)
   static NutritionTotals summarizeNutritionForToday(
     List<MealEntry> meals,
     DateTime now,

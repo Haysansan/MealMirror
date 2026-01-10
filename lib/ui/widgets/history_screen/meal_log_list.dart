@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/models/meal_entry.dart';
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/domain/models/meal_entry.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class MealLogList extends StatelessWidget {
   const MealLogList({super.key, required this.meals, required this.now});

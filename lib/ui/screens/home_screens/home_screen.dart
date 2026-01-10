@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../navigation/app_routes.dart';
-import '../../../data/auth_service.dart';
-import '../../../data/meal_store.dart';
-import '../../widgets/reusable/app_scaffold.dart';
-import '../../widgets/reusable/stat_bar.dart';
-import '../../../domain/models/meal_summary.dart';
-import '../../../domain/services/summary_service.dart';
-import '../../../domain/services/nutrition_service.dart';
-import '../../widgets/home_screen/quick_action_row.dart';
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/data/auth_service.dart';
+import 'package:mealmirror/data/meal_store.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/domain/models/home_view_model.dart';
+import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
+import 'package:mealmirror/ui/widgets/home_screen/home_header.dart';
+import 'package:mealmirror/ui/widgets/home_screen/pet_card.dart';
+import 'package:mealmirror/ui/widgets/home_screen/quick_action_row.dart';
+import 'package:mealmirror/ui/widgets/home_screen/daily_balance_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,17 +19,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<_HomeViewModel> _future;
-
-  void _onMealsChanged() {
-    if (!mounted) return;
-    _refresh();
-  }
+  late Future<HomeViewModel> _future;
 
   @override
   void initState() {
     super.initState();
-    _future = _load();
+    _future = _loadViewModel();
     MealStore.mealsRevision.addListener(_onMealsChanged);
   }
 
@@ -40,43 +34,54 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void _onMealsChanged() {
+    if (!mounted) return;
+    _refresh();
+  }
+
   Future<void> _refresh() async {
     setState(() {
-      _future = _load();
+      _future = _loadViewModel();
     });
     await _future;
   }
 
-  Future<_HomeViewModel> _load() async {
-    final nickname = await AuthService.getCurrentNickname();
+  Future<HomeViewModel> _loadViewModel() async {
+    final nickname = await AuthService.getCurrentNickname() ?? '';
     final meals = await MealStore.loadCurrentUserMeals();
     final now = DateTime.now();
     final today = MealStore.summarizeForToday(meals, now);
     final week = MealStore.summarizeForThisWeek(meals, now);
     final todayNutrition = MealStore.summarizeNutritionForToday(meals, now);
-    return _HomeViewModel(
+
+    return HomeViewModel(
       nickname: nickname,
       today: today,
       week: week,
       todayNutrition: todayNutrition,
+      isLoading: false,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: FutureBuilder<_HomeViewModel>(
+      body: FutureBuilder<HomeViewModel>(
         future: _future,
         builder: (context, snapshot) {
-          final model = snapshot.data;
-          final nickname = (model?.nickname?.trim().isNotEmpty ?? false)
-              ? model!.nickname!.trim()
-              : 'Ronan';
-          final todayPoints = model?.today.totalPoints ?? 0;
-          final todayMeals = model?.today.mealCount ?? 0;
-          final weekAvg = _weekAverage(model?.week);
-          final todayNutrition =
-              model?.todayNutrition ?? const NutritionTotals.zero();
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final viewModel =
+              snapshot.data ??
+              HomeViewModel(
+                nickname: '',
+                today: MealSummary(mealCount: 0, totalPoints: 0),
+                week: MealSummary(mealCount: 0, totalPoints: 0),
+                todayNutrition: const NutritionTotals.zero(),
+                isLoading: true,
+              );
 
           return RefreshIndicator(
             onRefresh: _refresh,
@@ -87,43 +92,16 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'your habits, reflected',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        Text(
-                          'mealmirror',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
+                  const HomeHeader(),
                   const SizedBox(height: 16),
-
-                  _petCard(
-                    nickname: nickname,
-                    todayMeals: todayMeals,
-                    todayPoints: todayPoints,
-                    todayNutrition: todayNutrition,
-                  ),
-
+                  PetCard(viewModel: viewModel),
                   const SizedBox(height: 16),
-
                   QuickActionRow(
-                    todayValue: _formatSigned(todayPoints),
-                    weekAvgValue: _formatSigned(weekAvg),
+                    todayValue: _formatSigned(viewModel.todayPoints),
+                    weekAvgValue: _formatSigned(viewModel.weekAverage),
                   ),
-
                   const SizedBox(height: 16),
-
-                  _dailyBalanceCard(totals: todayNutrition),
+                  DailyBalanceCard(totals: viewModel.todayNutrition),
                 ],
               ),
             ),
@@ -133,186 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  int _weekAverage(MealSummary? week) {
-    if (week == null) return 0;
-    return SummaryService.weekAverage(
-      totalPoints: week.totalPoints,
-      mealCount: week.mealCount,
-    );
-  }
-
   String _formatSigned(int value) {
     if (value == 0) return '+0';
     return value > 0 ? '+$value' : value.toString();
   }
-
-  Widget _petCard({
-    required String nickname,
-    required int todayMeals,
-    required int todayPoints,
-    required NutritionTotals todayNutrition,
-  }) {
-    final mood = _petMoodFromTodayScore(
-      todayPoints: todayPoints,
-      todayMeals: todayMeals,
-    );
-    final moodText = _petMoodHeadline(mood);
-    final adviceText = _nutritionAdvice(todayNutrition);
-    return Card(
-      color: AppColors.section,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => context.go(AppRoutes.profile),
-                  child: const Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Icon(
-                      Icons.person,
-                      size: 18,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            Image.asset('assets/images/MealMirrorPet.png', height: 120),
-
-            const SizedBox(height: 12),
-
-            Text(
-              '$nickname, your companion is $moodText',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 4),
-            Text(adviceText, style: TextStyle(fontSize: 12)),
-            const SizedBox(height: 4),
-            Text(
-              'Meals today: $todayMeals',
-              style: const TextStyle(fontSize: 11),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _PetMood _petMoodFromTodayScore({
-    required int todayPoints,
-    required int todayMeals,
-  }) {
-    if (todayMeals == 0) return _PetMood.sleeping;
-    if (todayPoints >= 8) return _PetMood.ecstatic;
-    if (todayPoints >= 3) return _PetMood.happy;
-    if (todayPoints >= 0) return _PetMood.okay;
-    if (todayPoints >= -3) return _PetMood.worried;
-    return _PetMood.upset;
-  }
-
-  String _petMoodHeadline(_PetMood mood) {
-    return switch (mood) {
-      _PetMood.sleeping => 'resting',
-      _PetMood.ecstatic => 'thriving',
-      _PetMood.happy => 'happy',
-      _PetMood.okay => 'okay',
-      _PetMood.worried => 'a bit worried',
-      _PetMood.upset => 'not feeling great',
-    };
-  }
-
-  String _nutritionAdvice(NutritionTotals totals) {
-    return SummaryService.nutritionAdvice(
-      energy: totals.energy,
-      sugar: totals.sugar,
-      fat: totals.fat,
-      protein: totals.protein,
-      fiber: totals.fiber,
-    );
-  }
-
-  Widget _dailyBalanceCard({required NutritionTotals totals}) {
-    return Card(
-      color: AppColors.section,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Today’s Balance',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            const Text('Neutral Day', style: TextStyle(fontSize: 12)),
-            const SizedBox(height: 12),
-
-            _balanceRow(
-              'Daily Power (ENERGY)',
-              NutritionService.barProgressFromSteps(totals.energy),
-              fillColor: AppColors.grainStarches,
-            ),
-            _balanceRow(
-              'Sweet Level (SUGAR)',
-              NutritionService.barProgressFromSteps(totals.sugar),
-              fillColor: AppColors.snacks,
-            ),
-            _balanceRow(
-              'Fat Fuel (FAT)',
-              NutritionService.barProgressFromSteps(totals.fat),
-              fillColor: AppColors.oilsFats,
-            ),
-            _balanceRow(
-              'Grow Power (PROTEIN)',
-              NutritionService.barProgressFromSteps(totals.protein),
-              fillColor: AppColors.meatSeafood,
-            ),
-            _balanceRow(
-              'Gut Guard (FIBER)',
-              NutritionService.barProgressFromSteps(totals.fiber),
-              fillColor: AppColors.veggieFruits,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _balanceRow(
-    String label,
-    double progress, {
-    required Color fillColor,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Expanded(child: Text(label, style: const TextStyle(fontSize: 12))),
-          StatBar(progress: progress, fillColor: fillColor),
-        ],
-      ),
-    );
-  }
 }
-
-class _HomeViewModel {
-  const _HomeViewModel({
-    required this.nickname,
-    required this.today,
-    required this.week,
-    required this.todayNutrition,
-  });
-
-  final String? nickname;
-  final MealSummary today;
-  final MealSummary week;
-  final NutritionTotals todayNutrition;
-}
-
-enum _PetMood { sleeping, ecstatic, happy, okay, worried, upset }

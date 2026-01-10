@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/models/instruction_step.dart';
-import '../reusable/common_widgets.dart';
+import 'package:mealmirror/domain/models/instruction_step.dart';
+import 'package:mealmirror/ui/widgets/reusable/common_widgets.dart';
 
 class ConversationRow extends StatelessWidget {
   const ConversationRow({required this.block, required this.iconSize});

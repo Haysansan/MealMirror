@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../domain/models/instruction_step.dart';
-import '../../theme/app_colors.dart';
-import '../reusable/common_widgets.dart';
+import 'package:mealmirror/domain/models/instruction_step.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/ui/widgets/reusable/common_widgets.dart';
 
 class StartCtaStep extends StatelessWidget {
   const StartCtaStep({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/models/instruction_step.dart' hide TextSpan;
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/domain/models/instruction_step.dart' hide TextSpan;
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class SoftCircle extends StatelessWidget {
   const SoftCircle({required this.diameter, required this.noiseColor});

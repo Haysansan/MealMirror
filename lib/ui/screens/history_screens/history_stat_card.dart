@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/models/meal_summary.dart';
-import '../../theme/app_colors.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class HistoryStatCard extends StatelessWidget {
   const HistoryStatCard({super.key, required this.title, required this.totals});

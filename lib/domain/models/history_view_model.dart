@@ -1,7 +1,7 @@
-import '../../data/meal_store.dart';
-import 'history_range.dart';
-import 'meal_entry.dart';
-import 'meal_summary.dart';
+import 'package:mealmirror/data/meal_store.dart';
+import 'package:mealmirror/domain/models/history_range.dart';
+import 'package:mealmirror/domain/models/meal_entry.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
 
 class HistoryViewModel {
   final List<MealEntry> meals;

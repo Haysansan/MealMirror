@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../navigation/app_routes.dart';
-import '../../theme/app_colors.dart';
-import '../../../data/meal_store.dart';
-import '../../widgets/reusable/app_scaffold.dart';
-import '../../widgets/logmeal_screen/nutrition_selector.dart';
-import '../../widgets/logmeal_screen/meal_input_card.dart';
-import '../../widgets/logmeal_screen/selection_pill.dart';
-import '../../../domain/models/log_meal_categories.dart';
+import 'package:mealmirror/ui/navigation/app_routes.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/data/meal_store.dart';
+import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
+import 'package:mealmirror/ui/widgets/logmeal_screen/nutrition_selector.dart';
+import 'package:mealmirror/ui/widgets/logmeal_screen/meal_input_card.dart';
+import 'package:mealmirror/ui/widgets/logmeal_screen/selection_pill.dart';
+import 'package:mealmirror/domain/models/log_meal_categories.dart';
 
 class ProcessingLevelScreen extends StatefulWidget {
   const ProcessingLevelScreen({

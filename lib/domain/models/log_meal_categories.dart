@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../ui/theme/app_colors.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
 
 /// categories used throughout the Log Meal flow.
 class LogMealCategoryInfo {
