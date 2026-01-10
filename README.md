@@ -7,12 +7,19 @@ MealMirror is a Flutter app for tracking meals and basic nutrition with a playfu
 ✨ **Core Features:**
 
 🍽️ **Meal Logging** - Log meals with multiple food categories (fruits, vegetables, proteins, dairy, grains, beverages, etc.)
+
 📊 **Nutrition Tracking** - Automatically estimate and track nutrition values (energy, sugar, fat, protein, fiber) for each meal
+
 ⭐ **Points System** - Earn or lose points based on meal quality, processing level (whole, processed, ultra-processed), and portion size
+
 🥗 **Nutri-Score Badges** - Get A-E quality ratings for each meal with color-coded visual indicators (A=green, E=red)
+
 🐾 **Pet Companion** - Interactive pet that reflects your meal choices through mood indicators based on daily nutrition and points
+
 👤 **User Profile** - Edit nickname, view cumulative statistics, and track your pet's personality
+
 📅 **Meal History** - Browse all logged meals with category icons, nutrition details, and quick stats
+
 🗑️ **Easy Management** - Swipe-to-delete meals, filter history by date, and view daily summaries
 
 
