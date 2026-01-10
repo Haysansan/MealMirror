@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -11,6 +12,12 @@ class MealStore {
   static final ValueNotifier<int> mealsRevision = ValueNotifier<int>(0);
 
   static Future<Database> _openDb() async {
+    if (kIsWeb) {
+      throw UnsupportedError(
+        'sqflite is not supported on web. Use a web-compatible storage (e.g. sembast, indexed_db, or shared_preferences) or run the app on mobile/desktop.',
+      );
+    }
+
     if (_db != null) return _db!;
 
     final path = join(await getDatabasesPath(), 'meals.db');
