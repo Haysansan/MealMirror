@@ -1,4 +1,4 @@
-import 'package:mealmirror/domain/models/history_range.dart';
+import 'package:mealmirror/domain/models/entities/history_range.dart';
 import 'package:mealmirror/domain/models/meal_entry.dart';
 import 'package:mealmirror/domain/models/meal_summary.dart';
 

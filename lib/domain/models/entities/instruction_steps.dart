@@ -1,4 +1,4 @@
-import 'package:mealmirror/domain/models/instruction_step.dart';
+import 'package:mealmirror/domain/models/entities/instruction_step.dart';
 
 const List<InstructionStep> instructionSteps = [
   InstructionStep(

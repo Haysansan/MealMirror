@@ -1,4 +1,4 @@
-import 'meal_summary.dart';
+import '../meal_summary.dart';
 import 'pet_mood.dart';
 import 'package:mealmirror/domain/services/summary_service.dart';
 
