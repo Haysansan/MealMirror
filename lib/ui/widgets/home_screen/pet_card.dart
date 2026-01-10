@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:mealmirror/ui/navigation/app_routes.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
-import 'package:mealmirror/domain/models/home_view_model.dart';
+import 'package:mealmirror/domain/models/entities/home_view_model.dart';
 
 class PetCard extends StatelessWidget {
   const PetCard({super.key, required this.viewModel});

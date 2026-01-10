@@ -1,4 +1,4 @@
-import 'package:mealmirror/domain/models/history_range.dart';
+import 'package:mealmirror/domain/models/entities/history_range.dart';
 
 class HistoryService {
   static List<T> filterMealsForRange<T>(

@@ -1,7 +1,5 @@
-/// Service to calculate nutrition data based on meal categories and portion sizes.
 class NutritionCalculationService {
-  /// Estimate nutrition values based on meal categories and portion.
-  /// Returns a map with energy, sugar, fat, protein, fiber.
+  /// Returns energy, sugar, fat, protein, fiber.
   static Map<String, int> calculateNutrition({
     required List<String> categories,
     required String portion,
@@ -14,19 +12,16 @@ class NutritionCalculationService {
     int protein = 0;
     int fiber = 0;
 
-    // Base nutrition values per category (approximate per serving)
     for (final category in categories) {
-      final categoryLower = category.toLowerCase();
-      final nutrition = _getCategoryNutrition(categoryLower);
+      final nutrition = _getCategoryNutrition(category.toLowerCase());
 
-      energy += (nutrition['energy'] as int);
-      sugar += (nutrition['sugar'] as int);
-      fat += (nutrition['fat'] as int);
-      protein += (nutrition['protein'] as int);
-      fiber += (nutrition['fiber'] as int);
+      energy += nutrition['energy']!;
+      sugar += nutrition['sugar']!;
+      fat += nutrition['fat']!;
+      protein += nutrition['protein']!;
+      fiber += nutrition['fiber']!;
     }
 
-    // Apply portion multiplier
     return {
       'energy': (energy * portionMultiplier).round(),
       'sugar': (sugar * portionMultiplier).round(),
@@ -46,7 +41,6 @@ class NutritionCalculationService {
   }
 
   static Map<String, int> _getCategoryNutrition(String category) {
-    // Approximate nutrition values per category
     return switch (category) {
       'vegetables' => {
         'energy': 25,

@@ -1,5 +1,5 @@
 import 'package:mealmirror/domain/models/meal_summary.dart';
-import 'package:mealmirror/domain/models/pet_mood.dart';
+import 'package:mealmirror/domain/models/entities/pet_mood.dart';
 import 'nutrition_service.dart';
 
 class SummaryService {

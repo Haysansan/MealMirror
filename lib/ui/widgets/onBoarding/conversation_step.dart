@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mealmirror/domain/models/instruction_step.dart';
+import 'package:mealmirror/domain/models/entities/instruction_step.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
 import 'package:mealmirror/ui/widgets/reusable/common_widgets.dart';
 import 'conversation_row.dart';

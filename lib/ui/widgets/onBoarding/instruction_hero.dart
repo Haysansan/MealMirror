@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mealmirror/domain/models/instruction_step.dart';
-import 'package:mealmirror/domain/models/instruction_view.dart';
+import 'package:mealmirror/domain/models/entities/instruction_step.dart';
+import 'package:mealmirror/domain/models/entities/instruction_view.dart';
 import 'conversation_step.dart';
 import 'start_cta_step.dart';
 import 'standard_step.dart';

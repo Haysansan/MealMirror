@@ -6,8 +6,8 @@ import 'package:mealmirror/ui/theme/app_colors.dart';
 import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/nutrition_selector.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/meal_input_card.dart';
-import 'package:mealmirror/domain/models/log_meal_categories.dart';
-import 'package:mealmirror/domain/models/log_meal_flow_args.dart';
+import 'package:mealmirror/domain/models/entities/log_meal_categories.dart';
+import 'package:mealmirror/domain/models/entities/log_meal_flow_args.dart';
 
 class PortionSizeScreen extends StatefulWidget {
   const PortionSizeScreen({super.key, required this.selectedCategories});

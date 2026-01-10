@@ -35,19 +35,20 @@ lib/
     user_repository.dart
   domain/
     models/
-      history_range.dart
-      history_view_model.dart
-      home_view_model.dart
-      instruction_step.dart
-      instruction_steps.dart
-      instruction_view.dart
-      log_meal_categories.dart
-      log_meal_flow_args.dart
       meal_entry.dart
       meal_summary.dart
-      pet_mood.dart
-      profile_view_model.dart
       user.dart
+        entities/
+          history_range.dart
+          history_view_model.dart
+          home_view_model.dart
+          instruction_step.dart
+          instruction_steps.dart
+          instruction_view.dart
+          log_meal_categories.dart
+          log_meal_flow_args.dart
+          pet_mood.dart
+          profile_view_model.dart
     services/
       history_service.dart
       meal_points_service.dart
@@ -67,9 +68,7 @@ lib/
       home_screens/
         home_screen.dart
       history_screens/
-        history_filter_tabs.dart
         history_screen.dart
-        history_stat_card.dart
       logmeal_screens/
         log_meal_screen.dart
         portion_size_screen.dart

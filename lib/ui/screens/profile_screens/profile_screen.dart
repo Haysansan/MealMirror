@@ -7,7 +7,7 @@ import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
 import 'package:mealmirror/ui/widgets/profile_screen/profile_header.dart';
 import 'package:mealmirror/ui/widgets/profile_screen/profile_stat_row.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
-import 'package:mealmirror/domain/models/profile_view_model.dart';
+import 'package:mealmirror/domain/models/entities/profile_view_model.dart';
 import 'package:mealmirror/domain/models/meal_entry.dart';
 import 'package:mealmirror/domain/services/summary_service.dart';
 import 'package:mealmirror/ui/navigation/app_routes.dart';

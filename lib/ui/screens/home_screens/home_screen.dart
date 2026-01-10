@@ -4,7 +4,7 @@ import 'package:mealmirror/data/meal_repository.dart';
 import 'package:mealmirror/data/user_repository.dart';
 import 'package:mealmirror/domain/models/meal_summary.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
-import 'package:mealmirror/domain/models/home_view_model.dart';
+import 'package:mealmirror/domain/models/entities/home_view_model.dart';
 import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
 import 'package:mealmirror/ui/widgets/home_screen/home_header.dart';
 import 'package:mealmirror/ui/widgets/home_screen/pet_card.dart';

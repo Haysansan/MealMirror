@@ -11,7 +11,7 @@ import 'package:mealmirror/domain/services/nutrition_calculation_service.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/nutrition_selector.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/meal_input_card.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/selection_pill.dart';
-import 'package:mealmirror/domain/models/log_meal_categories.dart';
+import 'package:mealmirror/domain/models/entities/log_meal_categories.dart';
 
 class ProcessingLevelScreen extends StatefulWidget {
   const ProcessingLevelScreen({

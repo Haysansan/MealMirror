@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mealmirror/data/meal_repository.dart';
-import 'package:mealmirror/domain/models/history_range.dart';
+import 'package:mealmirror/domain/models/entities/history_range.dart';
 import 'package:mealmirror/domain/models/meal_entry.dart';
-import 'package:mealmirror/domain/models/history_view_model.dart';
+import 'package:mealmirror/domain/models/entities/history_view_model.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
 import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
 import 'package:mealmirror/ui/widgets/history_screen/history_filter_tabs.dart';

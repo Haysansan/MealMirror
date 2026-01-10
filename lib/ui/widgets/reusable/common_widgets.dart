@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mealmirror/domain/models/instruction_step.dart' hide TextSpan;
+import 'package:mealmirror/domain/models/entities/instruction_step.dart'
+    hide TextSpan;
 import 'package:mealmirror/ui/theme/app_colors.dart';
 
 class SoftCircle extends StatelessWidget {

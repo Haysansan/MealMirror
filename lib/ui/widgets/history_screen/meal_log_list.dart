@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mealmirror/domain/models/meal_entry.dart';
-import 'package:mealmirror/domain/models/log_meal_categories.dart';
+import 'package:mealmirror/domain/models/entities/log_meal_categories.dart';
 import 'package:mealmirror/domain/services/nutri_score_service.dart';
 import 'package:mealmirror/data/meal_repository.dart';
 
