@@ -1,4 +1,3 @@
-import 'package:mealmirror/data/meal_store.dart';
 import 'package:mealmirror/domain/models/history_range.dart';
 import 'package:mealmirror/domain/models/meal_entry.dart';
 import 'package:mealmirror/domain/models/meal_summary.dart';
@@ -36,10 +35,29 @@ class HistoryViewModel {
   }
 
   NutritionTotals get nutritionTotals {
-    final now = DateTime.now();
-    return selectedRange == HistoryRange.daily
-        ? MealStore.summarizeNutritionForToday(meals, now)
-        : MealStore.summarizeNutritionForThisWeek(meals, now);
+    final filtered = filteredMeals;
+
+    int totalEnergy = 0;
+    int totalSugar = 0;
+    int totalFat = 0;
+    int totalProtein = 0;
+    int totalFiber = 0;
+
+    for (final meal in filtered) {
+      totalEnergy += meal.energy;
+      totalSugar += meal.sugar;
+      totalFat += meal.fat;
+      totalProtein += meal.protein;
+      totalFiber += meal.fiber;
+    }
+
+    return NutritionTotals(
+      energy: totalEnergy,
+      sugar: totalSugar,
+      fat: totalFat,
+      protein: totalProtein,
+      fiber: totalFiber,
+    );
   }
 
   String get statsTitle => selectedRange == HistoryRange.daily

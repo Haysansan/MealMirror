@@ -14,51 +14,56 @@ class NutriScoreService {
     int score = 0;
 
     // Energy (per 100g): 0-3375 kJ
-    if (energy > 3000)
+    if (energy > 3000) {
       score += 10;
-    else if (energy > 2250)
+    } else if (energy > 2250) {
       score += 8;
-    else if (energy > 1500)
+    } else if (energy > 1500) {
       score += 6;
-    else if (energy > 750)
+    } else if (energy > 750) {
       score += 4;
-    else if (energy > 375)
+    } else if (energy > 375) {
       score += 2;
+    }
 
     // Sugar (per 100g): 0-45g
-    if (sugar > 36)
+    if (sugar > 36) {
       score += 10;
-    else if (sugar > 27)
+    } else if (sugar > 27) {
       score += 8;
-    else if (sugar > 18)
+    } else if (sugar > 18) {
       score += 6;
-    else if (sugar > 9)
+    } else if (sugar > 9) {
       score += 4;
-    else if (sugar > 4)
+    } else if (sugar > 4) {
       score += 2;
+    }
 
     // Fat (per 100g): 0-40g
-    if (fat > 32)
+    if (fat > 32) {
       score += 10;
-    else if (fat > 24)
+    } else if (fat > 24) {
       score += 8;
-    else if (fat > 16)
+    } else if (fat > 16) {
       score += 6;
-    else if (fat > 8)
+    } else if (fat > 8) {
       score += 4;
-    else if (fat > 4)
+    } else if (fat > 4) {
       score += 2;
+    }
 
     // Positive points for protein and fiber (these reduce the score)
-    if (protein > 15)
+    if (protein > 15) {
       score -= 2;
-    else if (protein > 10)
+    } else if (protein > 10) {
       score -= 1;
+    }
 
-    if (fiber > 4)
+    if (fiber > 4) {
       score -= 2;
-    else if (fiber > 2)
+    } else if (fiber > 2) {
       score -= 1;
+    }
 
     // Ensure score is within bounds
     score = score.clamp(0, 40);

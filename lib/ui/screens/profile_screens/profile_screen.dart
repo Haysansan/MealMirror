@@ -76,14 +76,17 @@ class _ProfileScreenState extends State<ProfileScreen>
       ),
     );
 
-    if (newNickname != null && newNickname.isNotEmpty && mounted) {
+    if (newNickname != null && newNickname.isNotEmpty) {
       final success = await UserRepository.updateNickname(newNickname);
-      if (success && mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Nickname updated!')));
-        // Trigger rebuild to show new nickname
-        setState(() {});
+      if (mounted) {
+        if (success) {
+          ScaffoldMessenger.of(
+            // ignore: use_build_context_synchronously
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Nickname updated!')));
+          // rebuild to show new nickname
+          setState(() {});
+        }
       }
     }
     controller.dispose();
