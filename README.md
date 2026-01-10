@@ -25,7 +25,7 @@ MealMirror is a Flutter app for tracking meals and basic nutrition with a playfu
 
 ## Project Layered Structured
 
-- `lib/` — main app code (complete structure shown below)
+- `lib/` — main app code
 
 ```
 lib/
