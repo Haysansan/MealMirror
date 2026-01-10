@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:mealmirror/data/user_repository.dart';
 import 'package:mealmirror/ui/navigation/app_routes.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
-import 'package:mealmirror/data/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -41,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _errorMessage = null;
     });
 
-    final success = await AuthService.signUp(username, nickname);
+    final success = await UserRepository.signUp(username, nickname);
 
     if (!mounted) return;
 

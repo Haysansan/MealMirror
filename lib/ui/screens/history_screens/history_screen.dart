@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mealmirror/data/meal_store.dart';
+import 'package:mealmirror/data/meal_repository.dart';
 import 'package:mealmirror/domain/models/history_range.dart';
 import 'package:mealmirror/domain/models/meal_entry.dart';
 import 'package:mealmirror/domain/models/history_view_model.dart';
@@ -16,36 +16,45 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _HistoryScreenState extends State<HistoryScreen>
+    with WidgetsBindingObserver {
   late HistoryViewModel _viewModel;
   late Future<List<MealEntry>> _futureMeals;
 
   @override
   void initState() {
     super.initState();
-    _futureMeals = MealStore.loadCurrentUserMeals();
+    WidgetsBinding.instance.addObserver(this);
+    _loadMeals();
     _viewModel = const HistoryViewModel(
       meals: [],
       selectedRange: HistoryRange.daily,
       isLoading: true,
     );
-    MealStore.mealsRevision.addListener(_onMealsChanged);
+  }
+
+  void _loadMeals() {
+    _futureMeals = MealRepository.getAllMeals();
   }
 
   @override
   void dispose() {
-    MealStore.mealsRevision.removeListener(_onMealsChanged);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  void _onMealsChanged() {
-    if (!mounted) return;
-    _refresh();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      setState(() {
+        _loadMeals();
+      });
+    }
   }
 
   Future<void> _refresh() async {
     setState(() {
-      _futureMeals = MealStore.loadCurrentUserMeals();
+      _loadMeals();
     });
     await _futureMeals;
   }

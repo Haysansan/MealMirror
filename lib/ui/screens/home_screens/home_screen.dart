@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:mealmirror/data/auth_service.dart';
-import 'package:mealmirror/data/meal_store.dart';
+import 'package:mealmirror/data/meal_repository.dart';
+import 'package:mealmirror/data/user_repository.dart';
 import 'package:mealmirror/domain/models/meal_summary.dart';
 import 'package:mealmirror/ui/theme/app_colors.dart';
 import 'package:mealmirror/domain/models/home_view_model.dart';
@@ -18,25 +18,29 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late Future<HomeViewModel> _future;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _future = _loadViewModel();
-    MealStore.mealsRevision.addListener(_onMealsChanged);
   }
 
   @override
   void dispose() {
-    MealStore.mealsRevision.removeListener(_onMealsChanged);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  void _onMealsChanged() {
-    if (!mounted) return;
-    _refresh();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      setState(() {
+        _future = _loadViewModel();
+      });
+    }
   }
 
   Future<void> _refresh() async {
@@ -47,12 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<HomeViewModel> _loadViewModel() async {
-    final nickname = await AuthService.getCurrentNickname() ?? '';
-    final meals = await MealStore.loadCurrentUserMeals();
+    final nickname = UserRepository.getNickname();
+    final meals = await MealRepository.getAllMeals();
     final now = DateTime.now();
-    final today = MealStore.summarizeForToday(meals, now);
-    final week = MealStore.summarizeForThisWeek(meals, now);
-    final todayNutrition = MealStore.summarizeNutritionForToday(meals, now);
+
+    // Summarize meals for today and this week
+    final today = _summarizeForToday(meals, now);
+    final week = _summarizeForThisWeek(meals, now);
+    final todayNutrition = _summarizeNutritionForToday(meals, now);
 
     return HomeViewModel(
       nickname: nickname,
@@ -60,6 +66,59 @@ class _HomeScreenState extends State<HomeScreen> {
       week: week,
       todayNutrition: todayNutrition,
       isLoading: false,
+    );
+  }
+
+  MealSummary _summarizeForToday(List<dynamic> meals, DateTime now) {
+    int count = 0;
+    int totalPoints = 0;
+    for (final meal in meals) {
+      if (meal.date.year == now.year &&
+          meal.date.month == now.month &&
+          meal.date.day == now.day) {
+        count++;
+        totalPoints += (meal.points as int);
+      }
+    }
+    return MealSummary(mealCount: count, totalPoints: totalPoints);
+  }
+
+  MealSummary _summarizeForThisWeek(List<dynamic> meals, DateTime now) {
+    int count = 0;
+    int totalPoints = 0;
+    final weekStart = now.subtract(Duration(days: now.weekday - 1));
+    for (final meal in meals) {
+      if (meal.date.isAfter(weekStart) &&
+          meal.date.isBefore(now.add(const Duration(days: 1)))) {
+        count++;
+        totalPoints += (meal.points as int);
+      }
+    }
+    return MealSummary(mealCount: count, totalPoints: totalPoints);
+  }
+
+  NutritionTotals _summarizeNutritionForToday(
+    List<dynamic> meals,
+    DateTime now,
+  ) {
+    int energy = 0, sugar = 0, fat = 0, protein = 0, fiber = 0;
+    for (final meal in meals) {
+      if (meal.date.year == now.year &&
+          meal.date.month == now.month &&
+          meal.date.day == now.day) {
+        energy += (meal.energy as int);
+        sugar += (meal.sugar as int);
+        fat += (meal.fat as int);
+        protein += (meal.protein as int);
+        fiber += (meal.fiber as int);
+      }
+    }
+    return NutritionTotals(
+      energy: energy,
+      sugar: sugar,
+      fat: fat,
+      protein: protein,
+      fiber: fiber,
     );
   }
 
@@ -79,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 nickname: '',
                 today: MealSummary(mealCount: 0, totalPoints: 0),
                 week: MealSummary(mealCount: 0, totalPoints: 0),
-                todayNutrition: const NutritionTotals.zero(),
+                todayNutrition: NutritionTotals.zero(),
                 isLoading: true,
               );
 

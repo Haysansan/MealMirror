@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:mealmirror/ui/navigation/app_routes.dart';
-import 'package:mealmirror/ui/theme/app_colors.dart';
-import 'package:mealmirror/data/meal_store.dart';
 import 'package:mealmirror/ui/widgets/reusable/app_scaffold.dart';
+import 'package:mealmirror/ui/theme/app_colors.dart';
+import 'package:mealmirror/data/meal_repository.dart';
+import 'package:mealmirror/domain/models/meal_entry.dart';
+import 'package:mealmirror/domain/services/meal_points_service.dart';
+import 'package:mealmirror/domain/services/nutrition_calculation_service.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/nutrition_selector.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/meal_input_card.dart';
 import 'package:mealmirror/ui/widgets/logmeal_screen/selection_pill.dart';
@@ -68,11 +71,35 @@ class _ProcessingLevelScreenState extends State<ProcessingLevelScreen> {
     });
 
     try {
-      await MealStore.addMealForCurrentUser(
+      // Calculate points based on processing and portion
+      final points = MealPointsService.calculatePoints(
+        processing: processing,
+        portion: widget.selectedPortion,
+      );
+
+      // Calculate nutrition based on categories and portion
+      final nutritionMap = NutritionCalculationService.calculateNutrition(
+        categories: widget.selectedCategories,
+        portion: widget.selectedPortion,
+      );
+
+      // Create a MealEntry and add it to the repository
+      final meal = MealEntry(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        createdAt: DateTime.now(),
+        date: DateTime.now(),
         categories: widget.selectedCategories,
         portion: widget.selectedPortion.toLowerCase(),
         processing: processing.toLowerCase(),
+        points: points,
+        energy: nutritionMap['energy'] ?? 0,
+        sugar: nutritionMap['sugar'] ?? 0,
+        fat: nutritionMap['fat'] ?? 0,
+        protein: nutritionMap['protein'] ?? 0,
+        fiber: nutritionMap['fiber'] ?? 0,
       );
+
+      await MealRepository.addMeal(meal);
 
       if (!mounted) return;
       context.go(AppRoutes.home);
