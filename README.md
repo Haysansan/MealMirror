@@ -23,20 +23,7 @@ MealMirror is a Flutter app for tracking meals and basic nutrition with a playfu
 🗑️ **Easy Management** - Swipe-to-delete meals, filter history by date, and view daily summaries
 
 
-## Important files and folders (expanded)
-
-- `android/`
-  - `build.gradle.kts`
-  - `gradle.properties`
-  - `gradlew`, `gradlew.bat`
-  - `local.properties`
-  - `app/` (Android module)
-
-- `assets/`, `fonts/`, `images/` — app assets and bundled fonts
-
-- `build/` — Flutter build outputs and cached artifacts
-
-- `ios/`, `macos/`, `linux/`, `windows/` — platform runner projects and native embeddings
+## Project Layered Structured
 
 - `lib/` — main app code (complete structure shown below)
 
