@@ -1,4 +1,5 @@
 enum InstructionStepLayout {
+  message,
   meetCompanion,
   illustrationPrompt,
   conversation,

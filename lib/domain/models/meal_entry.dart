@@ -6,6 +6,11 @@ class MealEntry {
   final String portion;
   final String processing;
   final int points;
+  final int energy;
+  final int sugar;
+  final int fat;
+  final int protein;
+  final int fiber;
 
   const MealEntry({
     required this.id,
@@ -15,8 +20,12 @@ class MealEntry {
     required this.portion,
     required this.processing,
     this.points = 0,
+    this.energy = 0,
+    this.sugar = 0,
+    this.fat = 0,
+    this.protein = 0,
+    this.fiber = 0,
   });
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -25,6 +34,11 @@ class MealEntry {
       'portion': portion,
       'processing': processing,
       'points': points,
+      'energy': energy,
+      'sugar': sugar,
+      'fat': fat,
+      'protein': protein,
+      'fiber': fiber,
     };
   }
 
@@ -37,6 +51,11 @@ class MealEntry {
       portion: map['portion'] as String? ?? '',
       processing: map['processing'] as String? ?? '',
       points: int.tryParse(map['points']?.toString() ?? '') ?? 0,
+      energy: int.tryParse(map['energy']?.toString() ?? '') ?? 0,
+      sugar: int.tryParse(map['sugar']?.toString() ?? '') ?? 0,
+      fat: int.tryParse(map['fat']?.toString() ?? '') ?? 0,
+      protein: int.tryParse(map['protein']?.toString() ?? '') ?? 0,
+      fiber: int.tryParse(map['fiber']?.toString() ?? '') ?? 0,
     );
   }
 }

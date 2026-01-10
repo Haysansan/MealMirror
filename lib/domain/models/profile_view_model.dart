@@ -1,5 +1,5 @@
-import 'meal_entry.dart';
-import 'meal_summary.dart';
+import 'package:mealmirror/domain/models/meal_entry.dart';
+import 'package:mealmirror/domain/models/meal_summary.dart';
 import 'package:mealmirror/domain/services/summary_service.dart';
 
 class ProfileViewModel {
@@ -20,8 +20,12 @@ class ProfileViewModel {
   });
 
   factory ProfileViewModel.fromMeals(List<MealEntry> meals, {DateTime? now}) {
-    final _now = now ?? DateTime.now();
-    final todayStart = DateTime(_now.year, _now.month, _now.day);
+    final nowResolved = now ?? DateTime.now();
+    final todayStart = DateTime(
+      nowResolved.year,
+      nowResolved.month,
+      nowResolved.day,
+    );
     final last30Start = todayStart.subtract(const Duration(days: 29));
     final last30EndExclusive = todayStart.add(const Duration(days: 1));
 
