@@ -46,7 +46,7 @@ class SummaryService {
 
   static int uniqueTrackedDays<T>({
     required Iterable<T> meals,
-    required DateTime? Function(T item) getDate, // prefer DateTime?
+    required DateTime? Function(T item) getDate,
   }) {
     return meals
         .map(getDate)
@@ -72,7 +72,6 @@ class SummaryService {
     return end.difference(start).inDays + 1;
   }
 
-  // Generic range summarizer returns MealSummary model
   static MealSummary summarizeForRange<T>({
     required List<T> meals,
     required DateTime startInclusive,
@@ -91,7 +90,6 @@ class SummaryService {
     return MealSummary(mealCount: rangeMeals.length, totalPoints: total);
   }
 
-  // Convenience helpers
   static MealSummary summarizeForToday<T>({
     required List<T> meals,
     required DateTime now,
@@ -115,7 +113,6 @@ class SummaryService {
     required DateTime? Function(T item) getCreatedAt,
     required int Function(T item) getPoints,
   }) {
-    // start of week with Monday as first day:
     final startOfWeek = DateTime(
       now.year,
       now.month,
